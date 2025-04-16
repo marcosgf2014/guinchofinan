@@ -192,6 +192,49 @@
                 modal.show();
             });
         });
+        // Máscara dinâmica de CPF/CNPJ
+        function aplicarMascaraCpfCnpj(input) {
+            input.addEventListener('input', function(e) {
+                let v = input.value.replace(/\D/g, '');
+                if (v.length <= 11) {
+                    // CPF: 000.000.000-00
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                } else {
+                    // CNPJ: 00.000.000/0000-00
+                    v = v.replace(/(\d{2})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1/$2');
+                    v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+                }
+                input.value = v;
+            });
+        }
+        aplicarMascaraCpfCnpj(document.getElementById('cpf_cnpj'));
+        aplicarMascaraCpfCnpj(document.getElementById('editar_cpf_cnpj'));
+        // Máscara telefone
+        function aplicarMascaraTelefone(input) {
+            input.addEventListener('input', function(e) {
+                let v = input.value.replace(/\D/g, '');
+                if (v.length > 11) v = v.slice(0, 11);
+                if (v.length > 6 && v.length <= 10) {
+                    // Fixo ou celular antigo: (XX) XXXX-XXXX
+                    v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+                } else if (v.length > 10) {
+                    // Celular novo: (XX) XXXXX-XXXX
+                    v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+                } else if (v.length > 2) {
+                    v = v.replace(/(\d{2})(\d{0,9})/, '($1) $2');
+                } else {
+                    v = v.replace(/(\d{0,2})/, '($1');
+                }
+                input.value = v.trim();
+            });
+        }
+        aplicarMascaraTelefone(document.getElementById('telefone'));
+        aplicarMascaraTelefone(document.getElementById('editar_telefone'));
+
         // Validação simples de CPF/CNPJ (apenas formato, não dígito)
         function validarCpfCnpj(valor) {
             valor = valor.replace(/\D/g, '');
