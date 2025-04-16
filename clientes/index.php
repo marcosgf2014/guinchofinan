@@ -20,6 +20,12 @@
         </nav>
     </aside>
     <main class="main-content container py-4">
+        <?php if (isset($_GET['msg'])): ?>
+            <div class="alert alert-<?php echo isset($_GET['type']) ? htmlspecialchars($_GET['type']) : 'success'; ?> alert-dismissible fade show" role="alert">
+                <?php echo htmlspecialchars($_GET['msg']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+        <?php endif; ?>
         <h1 class="mb-4"><i class="fas fa-users"></i> Clientes</h1>
         <div class="row mb-4">
             <div class="col-md-8">
@@ -103,8 +109,14 @@
                                 echo '<td>' . (isset($row['email']) ? htmlspecialchars($row['email']) : '-') . '</td>';
                                 echo '<td>' . (isset($row['endereco']) ? htmlspecialchars($row['endereco']) : '-') . '</td>';
                                 echo '<td class="text-center">';
-                                echo '<a href="#" class="btn btn-sm btn-primary me-1" title="Editar"><i class="fas fa-edit"></i></a>';
-                                echo '<a href="#" class="btn btn-sm btn-danger" title="Excluir"><i class="fas fa-trash"></i></a>';
+                                echo '<a href="#" class="btn btn-sm btn-primary me-1 btn-editar" title="Editar" 
+    data-id="' . $row['id'] . '" 
+    data-nome="' . htmlspecialchars($row['nome'], ENT_QUOTES) . '" 
+    data-cpf_cnpj="' . htmlspecialchars($row['cpf_cnpj'], ENT_QUOTES) . '" 
+    data-telefone="' . htmlspecialchars($row['telefone'], ENT_QUOTES) . '" 
+    data-email="' . htmlspecialchars($row['email'], ENT_QUOTES) . '" 
+    data-endereco="' . htmlspecialchars($row['endereco'], ENT_QUOTES) . '"><i class="fas fa-edit"></i></a>';
+                                echo '<a href="excluir.php?id=' . $row['id'] . '" class="btn btn-sm btn-danger btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>';
                                 echo '</td>';
                                 echo '</tr>';
                             }
@@ -116,8 +128,105 @@
                 </table>
             </div>
         </section>
-    </main>
+    <!-- Modal Editar Cliente -->
+<div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarClienteLabel"><i class="fas fa-user-edit"></i> Editar Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <form class="row g-3 p-3" method="post" action="editar.php" id="formEditarCliente">
+        <input type="hidden" name="id" id="editar_id">
+        <div class="col-md-12">
+          <label for="editar_nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="editar_nome" name="nome" placeholder="Nome completo" required>
+        </div>
+        <div class="col-md-6">
+          <label for="editar_cpf_cnpj" class="form-label">CPF/CNPJ</label>
+          <input type="text" class="form-control" id="editar_cpf_cnpj" name="cpf_cnpj" placeholder="CPF ou CNPJ">
+        </div>
+        <div class="col-md-6">
+          <label for="editar_telefone" class="form-label">Telefone</label>
+          <input type="text" class="form-control" id="editar_telefone" name="telefone" placeholder="Telefone">
+        </div>
+        <div class="col-md-6">
+          <label for="editar_email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="editar_email" name="email" placeholder="Email">
+        </div>
+        <div class="col-md-6">
+          <label for="editar_endereco" class="form-label">Endereço</label>
+          <input type="text" class="form-control" id="editar_endereco" name="endereco" placeholder="Endereço">
+        </div>
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save"></i> Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</main>
+<script>
+// Confirmação de exclusão
+    document.addEventListener('DOMContentLoaded', function() {
+        const excluirLinks = document.querySelectorAll('.btn-excluir');
+        excluirLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                if (!confirm('Tem certeza que deseja excluir este cliente?')) {
+                    event.preventDefault();
+                }
+            });
+        });
+        // Preencher modal de edição
+        const editarLinks = document.querySelectorAll('.btn-editar');
+        editarLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('editar_id').value = this.getAttribute('data-id');
+                document.getElementById('editar_nome').value = this.getAttribute('data-nome');
+                document.getElementById('editar_cpf_cnpj').value = this.getAttribute('data-cpf_cnpj');
+                document.getElementById('editar_telefone').value = this.getAttribute('data-telefone');
+                document.getElementById('editar_email').value = this.getAttribute('data-email');
+                document.getElementById('editar_endereco').value = this.getAttribute('data-endereco');
+                var modal = new bootstrap.Modal(document.getElementById('modalEditarCliente'));
+                modal.show();
+            });
+        });
+        // Validação simples de CPF/CNPJ (apenas formato, não dígito)
+        function validarCpfCnpj(valor) {
+            valor = valor.replace(/\D/g, '');
+            if (valor.length === 11) return true; // CPF
+            if (valor.length === 14) return true; // CNPJ
+            return false;
+        }
+        document.getElementById('cpf_cnpj').addEventListener('blur', function() {
+            if (this.value && !validarCpfCnpj(this.value)) {
+                alert('CPF ou CNPJ inválido!');
+                this.focus();
+            }
+        });
+        document.getElementById('editar_cpf_cnpj').addEventListener('blur', function() {
+            if (this.value && !validarCpfCnpj(this.value)) {
+                alert('CPF ou CNPJ inválido!');
+                this.focus();
+            }
+        });
+    });
+</script>
     <!-- Bootstrap JS (opcional, para componentes interativos) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Confirmação de exclusão
+    document.addEventListener('DOMContentLoaded', function() {
+        const excluirLinks = document.querySelectorAll('.btn-excluir');
+        excluirLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                if (!confirm('Tem certeza que deseja excluir este cliente?')) {
+                    event.preventDefault();
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
