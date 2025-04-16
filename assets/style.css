@@ -65,6 +65,14 @@ body {
 .btn-acao i {
     pointer-events: none;
 }
+.btn-acao.btn-checklist {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+}
+.btn-acao.btn-checklist:hover {
+    background: #1e874a;
+}
 
     padding: 13px 28px;
     font-size: 1.07rem;

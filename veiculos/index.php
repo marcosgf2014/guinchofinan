@@ -157,7 +157,8 @@
                                 echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
                                 echo '<td>R$ ' . number_format($row['valor_servico'], 2, ',', '.') . '</td>';
                                 echo '<td class="text-center">';
-                                echo '<a href="#" class="btn-acao btn-editar btn-editar-veiculo" title="Editar" 
+                                echo '<a href="#" class="btn-acao btn-checklist btn-checklist-veiculo me-1" title="Checklist"><i class="fas fa-clipboard-check"></i></a>';
+echo '<a href="#" class="btn-acao btn-editar btn-editar-veiculo" title="Editar" 
     data-id="' . $row['id'] . '"
     data-cliente_id="' . $row['cliente_id'] . '"
     data-tipo_veiculo="' . htmlspecialchars($row['tipo_veiculo'], ENT_QUOTES) . '"
@@ -232,6 +233,13 @@
                 bootstrap.Modal.getInstance(modalEl).hide();
             }
         }
+    });
+    // Máscara para placa: XXX-XXXX
+    document.getElementById('placa').addEventListener('input', function(e) {
+        let v = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3);
+        v = v.slice(0,8); // Limite máximo
+        this.value = v;
     });
     </script>
 </body>
