@@ -20,23 +20,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validação de campos obrigatórios
     if ($cliente_id && $tipo_veiculo && $placa && $status && $valor_servico && $data_entrada && $hora_entrada) {
-        $sql = "INSERT INTO veiculos (
-            cliente_id, tipo_veiculo, placa, modelo, ano, cor, status, valor_servico,
-            data_entrada, hora_entrada, data_saida, hora_saida, origem, destino, obs
-        ) VALUES (
-            $cliente_id, '$tipo_veiculo', '$placa', '$modelo',
-            $ano, '$cor', '$status', $valor_servico,
-            '$data_entrada', '$hora_entrada',
-            " . ($data_saida ? "'$data_saida'" : 'NULL') . ",
-            " . ($hora_saida ? "'$hora_saida'" : 'NULL') . ",
-            '$origem', '$destino', '$obs'
-        )";
-        if ($conn->query($sql)) {
-            header('Location: index.php?msg=Veículo cadastrado com sucesso!&type=success');
-            exit;
+        if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+            // Atualizar veículo existente
+            $id = (int)$_GET['id'];
+            $sql = "UPDATE veiculos SET
+                cliente_id = $cliente_id,
+                tipo_veiculo = '$tipo_veiculo',
+                placa = '$placa',
+                modelo = '$modelo',
+                ano = $ano,
+                cor = '$cor',
+                status = '$status',
+                valor_servico = $valor_servico,
+                data_entrada = '$data_entrada',
+                hora_entrada = '$hora_entrada',
+                data_saida = " . ($data_saida ? "'$data_saida'" : 'NULL') . ",
+                hora_saida = " . ($hora_saida ? "'$hora_saida'" : 'NULL') . ",
+                origem = '$origem',
+                destino = '$destino',
+                obs = '$obs'
+                WHERE id = $id";
+            if ($conn->query($sql)) {
+                header('Location: index.php?msg=Veículo atualizado com sucesso!&type=success');
+                exit;
+            } else {
+                header('Location: index.php?msg=Erro ao atualizar veículo!&type=danger');
+                exit;
+            }
         } else {
-            header('Location: index.php?msg=Erro ao cadastrar veículo!&type=danger');
-            exit;
+            // Inserir novo veículo
+            $sql = "INSERT INTO veiculos (
+                cliente_id, tipo_veiculo, placa, modelo, ano, cor, status, valor_servico,
+                data_entrada, hora_entrada, data_saida, hora_saida, origem, destino, obs
+            ) VALUES (
+                $cliente_id, '$tipo_veiculo', '$placa', '$modelo',
+                $ano, '$cor', '$status', $valor_servico,
+                '$data_entrada', '$hora_entrada',
+                " . ($data_saida ? "'$data_saida'" : 'NULL') . ",
+                " . ($hora_saida ? "'$hora_saida'" : 'NULL') . ",
+                '$origem', '$destino', '$obs'
+            )";
+            if ($conn->query($sql)) {
+                header('Location: index.php?msg=Veículo cadastrado com sucesso!&type=success');
+                exit;
+            } else {
+                header('Location: index.php?msg=Erro ao cadastrar veículo!&type=danger');
+                exit;
+            }
         }
     } else {
         header('Location: index.php?msg=Preencha todos os campos obrigatórios!&type=warning');

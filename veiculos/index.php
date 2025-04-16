@@ -22,7 +22,13 @@
     <main class="main-content container py-4">
         <h1 class="mb-4"><i class="fas fa-car"></i> Veículos</h1>
         <div class="row mb-4">
-            <div class="col-md-12 text-end">
+            <div class="col-md-8">
+                <form class="d-flex" method="get" action="index.php">
+                    <input class="form-control me-2" type="search" name="busca" placeholder="Buscar por cliente, placa ou modelo" value="<?php echo isset($_GET['busca']) ? htmlspecialchars($_GET['busca']) : ''; ?>">
+                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                </form>
+            </div>
+            <div class="col-md-4 text-end">
                 <button type="button" class="btn btn-success px-4" data-bs-toggle="modal" data-bs-target="#modalCadastroVeiculo">
                     <i class="fas fa-plus"></i> Adicionar Veículo
                 </button>
@@ -126,41 +132,52 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Cliente</th>
-                            <th>Tipo</th>
                             <th>Placa</th>
                             <th>Modelo</th>
-                            <th>Ano</th>
-                            <th>Cor</th>
-                            <th>Status</th>
                             <th>Valor</th>
-                            <th>Entrada</th>
-                            <th>Saída</th>
-                            <th>Origem</th>
-                            <th>Destino</th>
-                            <th>Obs.</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         require_once '../db.php';
-                        $sql = "SELECT v.*, c.nome as cliente_nome FROM veiculos v LEFT JOIN clientes c ON v.cliente_id = c.id ORDER BY v.id DESC";
+                        // Filtro de busca
+                        $where = '';
+                        if (isset($_GET['busca']) && trim($_GET['busca']) !== '') {
+                            $busca = $conn->real_escape_string($_GET['busca']);
+                            $where = "WHERE c.nome LIKE '%$busca%' OR v.placa LIKE '%$busca%' OR v.modelo LIKE '%$busca%'";
+                        }
+                        $sql = "SELECT v.*, c.nome as cliente_nome FROM veiculos v LEFT JOIN clientes c ON v.cliente_id = c.id $where ORDER BY v.id ASC";
                         $res = $conn->query($sql);
                         if ($res && $res->num_rows > 0) {
                             while ($row = $res->fetch_assoc()) {
                                 echo '<tr>';
                                 echo '<td>' . htmlspecialchars($row['cliente_nome']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['tipo_veiculo']) . '</td>';
                                 echo '<td>' . htmlspecialchars($row['placa']) . '</td>';
                                 echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['ano']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['cor']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['status']) . '</td>';
                                 echo '<td>R$ ' . number_format($row['valor_servico'], 2, ',', '.') . '</td>';
-                                echo '<td>' . htmlspecialchars($row['data_entrada']) . ' ' . htmlspecialchars($row['hora_entrada']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['data_saida']) . ' ' . htmlspecialchars($row['hora_saida']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['origem']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['destino']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['obs']) . '</td>';
+                                echo '<td class="text-center">';
+                                echo '<a href="#" class="btn-acao btn-editar btn-editar-veiculo" title="Editar" 
+    data-id="' . $row['id'] . '"
+    data-cliente_id="' . $row['cliente_id'] . '"
+    data-tipo_veiculo="' . htmlspecialchars($row['tipo_veiculo'], ENT_QUOTES) . '"
+    data-placa="' . htmlspecialchars($row['placa'], ENT_QUOTES) . '"
+    data-modelo="' . htmlspecialchars($row['modelo'], ENT_QUOTES) . '"
+    data-ano="' . htmlspecialchars($row['ano'], ENT_QUOTES) . '"
+    data-cor="' . htmlspecialchars($row['cor'], ENT_QUOTES) . '"
+    data-status="' . htmlspecialchars($row['status'], ENT_QUOTES) . '"
+    data-valor_servico="' . htmlspecialchars($row['valor_servico'], ENT_QUOTES) . '"
+    data-data_entrada="' . htmlspecialchars($row['data_entrada'], ENT_QUOTES) . '"
+    data-hora_entrada="' . htmlspecialchars($row['hora_entrada'], ENT_QUOTES) . '"
+    data-data_saida="' . htmlspecialchars($row['data_saida'], ENT_QUOTES) . '"
+    data-hora_saida="' . htmlspecialchars($row['hora_saida'], ENT_QUOTES) . '"
+    data-origem="' . htmlspecialchars($row['origem'], ENT_QUOTES) . '"
+    data-destino="' . htmlspecialchars($row['destino'], ENT_QUOTES) . '"
+    data-obs="' . htmlspecialchars($row['obs'], ENT_QUOTES) . '">
+    <i class="fas fa-edit"></i>
+</a>';
+                                echo '<a href="excluir.php?id=' . $row['id'] . '" class="btn-acao btn-excluir btn-excluir-veiculo" title="Excluir" onclick=\'return confirm("Tem certeza que deseja excluir este veículo?");\'><i class="fas fa-trash"></i></a>';
+                                echo '</td>';
                                 echo '</tr>';
                             }
                         } else {
@@ -174,5 +191,48 @@
     </main>
     <!-- Bootstrap JS Bundle (necessário para modal funcionar) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Preencher modal para edição de veículo
+    document.querySelectorAll('.btn-editar-veiculo').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = new bootstrap.Modal(document.getElementById('modalCadastroVeiculo'));
+            document.getElementById('modalCadastroVeiculoLabel').innerHTML = '<i class="fas fa-car"></i> Editar Veículo';
+            document.querySelector('#modalCadastroVeiculo form').action = 'salvar.php?id=' + btn.dataset.id;
+            document.getElementById('cliente_id').value = btn.dataset.cliente_id;
+            document.getElementById('tipo_veiculo').value = btn.dataset.tipo_veiculo;
+            document.getElementById('placa').value = btn.dataset.placa;
+            document.getElementById('modelo').value = btn.dataset.modelo;
+            document.getElementById('ano').value = btn.dataset.ano;
+            document.getElementById('cor').value = btn.dataset.cor;
+            document.getElementById('status').value = btn.dataset.status;
+            document.getElementById('valor_servico').value = btn.dataset.valor_servico;
+            document.getElementById('data_entrada').value = btn.dataset.data_entrada;
+            document.getElementById('hora_entrada').value = btn.dataset.hora_entrada;
+            document.getElementById('data_saida').value = btn.dataset.data_saida;
+            document.getElementById('hora_saida').value = btn.dataset.hora_saida;
+            document.getElementById('origem').value = btn.dataset.origem;
+            document.getElementById('destino').value = btn.dataset.destino;
+            document.getElementById('obs').value = btn.dataset.obs;
+            modal.show();
+        });
+    });
+    // Ao fechar o modal, limpa o formulário e restaura para cadastro
+    document.getElementById('modalCadastroVeiculo').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('modalCadastroVeiculoLabel').innerHTML = '<i class="fas fa-car"></i> Novo Veículo';
+        document.querySelector('#modalCadastroVeiculo form').reset();
+        document.querySelector('#modalCadastroVeiculo form').action = 'salvar.php';
+    });
+    // Fechar modal automaticamente após salvar/editar com sucesso
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('msg') && urlParams.get('type') === 'success') {
+            const modalEl = document.getElementById('modalCadastroVeiculo');
+            if (modalEl && bootstrap && bootstrap.Modal.getInstance(modalEl)) {
+                bootstrap.Modal.getInstance(modalEl).hide();
+            }
+        }
+    });
+    </script>
 </body>
 </html>

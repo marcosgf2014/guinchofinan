@@ -32,6 +32,40 @@ body {
 .sidebar nav a {
     color: #fff;
     text-decoration: none;
+}
+
+/* Botões de ação em tabela (editar/excluir) */
+.btn-acao {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    margin-right: 4px;
+}
+.btn-acao.btn-editar {
+    background: #2176ff;
+    color: #fff;
+    border: none;
+}
+.btn-acao.btn-editar:hover {
+    background: #1761c7;
+}
+.btn-acao.btn-excluir {
+    background: #e63946;
+    color: #fff;
+    border: none;
+}
+.btn-acao.btn-excluir:hover {
+    background: #b71c1c;
+}
+.btn-acao i {
+    pointer-events: none;
+}
+
     padding: 13px 28px;
     font-size: 1.07rem;
     display: flex;

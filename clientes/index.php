@@ -109,14 +109,14 @@
                                 echo '<td>' . (isset($row['email']) ? htmlspecialchars($row['email']) : '-') . '</td>';
                                 echo '<td>' . (isset($row['endereco']) ? htmlspecialchars($row['endereco']) : '-') . '</td>';
                                 echo '<td class="text-center">';
-                                echo '<a href="#" class="btn btn-sm btn-primary me-1 btn-editar" title="Editar" 
-    data-id="' . $row['id'] . '" 
-    data-nome="' . htmlspecialchars($row['nome'], ENT_QUOTES) . '" 
-    data-cpf_cnpj="' . htmlspecialchars($row['cpf_cnpj'], ENT_QUOTES) . '" 
-    data-telefone="' . htmlspecialchars($row['telefone'], ENT_QUOTES) . '" 
-    data-email="' . htmlspecialchars($row['email'], ENT_QUOTES) . '" 
+                                echo '<a href="#" class="btn-acao btn-editar btn-editar-cliente" title="Editar"
+    data-id="' . $row['id'] . '"
+    data-nome="' . htmlspecialchars($row['nome'], ENT_QUOTES) . '"
+    data-cpf_cnpj="' . htmlspecialchars($row['cpf_cnpj'], ENT_QUOTES) . '"
+    data-telefone="' . htmlspecialchars($row['telefone'], ENT_QUOTES) . '"
+    data-email="' . htmlspecialchars($row['email'], ENT_QUOTES) . '"
     data-endereco="' . htmlspecialchars($row['endereco'], ENT_QUOTES) . '"><i class="fas fa-edit"></i></a>';
-                                echo '<a href="excluir.php?id=' . $row['id'] . '" class="btn btn-sm btn-danger btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>';
+                                echo '<a href="excluir.php?id=' . $row['id'] . '" class="btn-acao btn-excluir btn-excluir-cliente" title="Excluir"><i class="fas fa-trash"></i></a>';
                                 echo '</td>';
                                 echo '</tr>';
                             }
