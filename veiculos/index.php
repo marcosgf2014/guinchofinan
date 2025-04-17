@@ -158,7 +158,7 @@
                                 echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
                                 echo '<td>R$ ' . number_format($row['valor_servico'], 2, ',', '.') . '</td>';
                                 echo '<td class="text-center">';
-                                echo '<a href="#" class="btn-acao btn-checklist btn-checklist-veiculo me-1" title="Checklist"><i class="fas fa-clipboard-check"></i></a>';
+                                echo '<a href="../checklist/checklist_novo.php?cliente=' . urlencode($row['cliente_nome']) . '&veiculo=' . urlencode($row['modelo'] . ' - ' . $row['placa']) . '" class="btn-acao btn-checklist btn-checklist-veiculo me-1" title="Checklist"><i class="fas fa-clipboard-check"></i></a>';
 echo '<a href="#" class="btn-acao btn-editar btn-editar-veiculo" title="Editar" 
     data-id="' . $row['id'] . '"
     data-cliente_id="' . $row['cliente_id'] . '"

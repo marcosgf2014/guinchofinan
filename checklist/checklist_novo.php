@@ -23,6 +23,27 @@
     <main class="main-content container py-4">
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Novo Checklist</h1>
         <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-5">
+                    <label for="cliente" class="form-label">Cliente</label>
+                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?php echo isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : ''; ?>" required>
+                </div>
+                <div class="col-md-5">
+                    <label for="veiculo" class="form-label">Veículo</label>
+                    <select class="form-select" id="veiculo" name="veiculo" required>
+                        <option value="">Selecione...</option>
+                        <?php if (isset($_GET['veiculo'])): ?>
+                            <option value="<?php echo htmlspecialchars($_GET['veiculo']); ?>" selected><?php echo htmlspecialchars($_GET['veiculo']); ?></option>
+                        <?php endif; ?>
+                        <!-- Opções devem ser preenchidas dinamicamente -->
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="entrada" class="form-label">Entrada</label>
+                    <?php date_default_timezone_set('America/Sao_Paulo'); ?>
+<input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>" required>
+                </div>
+            </div>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs mb-3" id="checklistTabs" role="tablist">
                 <li class="nav-item" role="presentation">
