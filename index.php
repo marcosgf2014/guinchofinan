@@ -14,6 +14,7 @@
             <a href="index.php" class="active"><i class="fas fa-home"></i> Dashboard</a>
             <a href="clientes/index.php"><i class="fas fa-users"></i> Clientes</a>
             <a href="veiculos/index.php"><i class="fas fa-car"></i> Veículos</a>
+            <a href="checklist/index.php"><i class="fas fa-clipboard-check"></i> Checklist</a>
             <a href="financeiro/index.php"><i class="fas fa-coins"></i> Financeiro</a>
         </nav>
     </aside>
