@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<?php if(isset($_GET['msg'])): ?>
+  <div class="alert alert-success mt-3">
+    <?= htmlspecialchars($_GET['msg']) ?>
+  </div>
+<?php endif; ?>
+
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -40,7 +45,7 @@
                         <h5 class="modal-title" id="modalCadastroChecklistLabel"><i class="fas fa-clipboard-check"></i> Novo Checklist</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
-                    <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
+                    <form class="row g-3 p-3" method="post" action="salvar_checklist.php" enctype="multipart/form-data">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs mb-3" id="checklistTabs" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -225,14 +230,7 @@
                             </div>
                         </div>
                         <div class="text-end mt-3">
-                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Checklist</button>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="itens" class="form-label">Itens (um por linha)</label>
-                            <textarea class="form-control" id="itens" name="itens" rows="4" placeholder="Ex: Verificar óleo\nVerificar pneus\nVerificar documentos" required></textarea>
-                        </div>
-                        <div class="col-12 text-end">
-                            <button type="submit" class="btn btn-success px-4"><i class="fas fa-save"></i> Salvar</button>
+                            <button type="submit" class="btn btn-success px-4"><i class="fas fa-save"></i> Salvar Checklist</button>
                         </div>
                     </form>
                 </div>

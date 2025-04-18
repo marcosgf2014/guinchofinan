@@ -22,7 +22,7 @@
     </aside>
     <main class="main-content container py-4">
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Novo Checklist</h1>
-        <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
+        <form class="row g-3 p-3" method="post" action="salvar_checklist.php" enctype="multipart/form-data">
             <div class="row mb-3 align-items-end">
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
