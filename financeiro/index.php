@@ -36,13 +36,13 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 ?>
 <div class="row mb-4">
     <div class="col-md-4">
-        <div class="card text-bg-success mb-3"><div class="card-body"><h5 class="card-title mb-0">Entradas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['entradas'],2,',','.') ?></p></div></div>
+        <div class="card text-bg-success mb-3"><div class="card-body"><h5 class="card-title mb-0 text-center" style="color:#111; font-weight:bold; font-size:2rem; letter-spacing:1px;">Entradas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['entradas'],2,',','.') ?></p></div></div>
     </div>
     <div class="col-md-4">
-        <div class="card text-bg-danger mb-3"><div class="card-body"><h5 class="card-title mb-0">Saídas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['saidas'],2,',','.') ?></p></div></div>
+        <div class="card text-bg-danger mb-3"><div class="card-body"><h5 class="card-title mb-0 text-center" style="color:#111; font-weight:bold; font-size:2rem; letter-spacing:1px;">Saídas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['saidas'],2,',','.') ?></p></div></div>
     </div>
     <div class="col-md-4">
-        <div class="card text-bg-primary mb-3"><div class="card-body"><h5 class="card-title mb-0">Saldo</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['saldo'],2,',','.') ?></p></div></div>
+        <div class="card text-bg-primary mb-3"><div class="card-body"><h5 class="card-title mb-0 text-center" style="color:#111; font-weight:bold; font-size:2rem; letter-spacing:1px;">Saldo</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['saldo'],2,',','.') ?></p></div></div>
     </div>
 </div>
 
@@ -62,10 +62,12 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalCadastroFinanceiroLabel"><i class="fas fa-coins"></i> Novo Lançamento</h5>
+                        <h5 class="modal-title" id="modalCadastroFinanceiroLabel"><i class="fas fa-coins"></i> <span id="tituloModal">Novo Lançamento</span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
+    <input type="hidden" id="id_lancamento" name="id_lancamento" value="">
+
                         <div class="col-md-6">
     <label for="tipo" class="form-label">Receitas/Despesas</label>
 <select class="form-select" id="tipo" name="tipo">
@@ -156,7 +158,7 @@ if ($res && $res->num_rows > 0) {
         echo '<td>' . htmlspecialchars($row['pagamento'] ?? '') . '</td>';
         echo '<td>' . htmlspecialchars($row['nota_fiscal'] ?? '') . '</td>';
         echo '<td class="text-center">';
-        echo '<a href="#" class="btn-acao btn-editar btn-editar-financeiro me-2" title="Editar"><i class="fas fa-edit"></i></a>';
+        echo '<a href="#" class="btn-acao btn-editar btn-editar-financeiro me-2" title="Editar" data-id="' . $row['id'] . '"><i class="fas fa-edit"></i></a>';
         echo '<a href="excluir.php?id=' . $row['id'] . '" class="btn-acao btn-excluir btn-excluir-financeiro" title="Excluir" onclick="return confirm(\'Tem certeza que deseja excluir este lançamento?\');"><i class="fas fa-trash"></i></a>';
         echo '</td>';
         echo '</tr>';
@@ -217,6 +219,48 @@ function atualizarCategorias() {
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('tipo').addEventListener('change', atualizarCategorias);
     atualizarCategorias();
+
+    // Edição: ao clicar em Editar
+    document.querySelectorAll('.btn-editar-financeiro').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = this.getAttribute('data-id');
+            fetch('get_lancamento.php?id=' + id)
+                .then(resp => resp.json())
+                .then(data => {
+                    if(data.erro) {
+                        alert(data.erro);
+                        return;
+                    }
+                    document.getElementById('id_lancamento').value = data.id;
+                    document.getElementById('tipo').value = data.tipo;
+                    atualizarCategorias();
+                    document.getElementById('categoria').value = data.categoria;
+                    document.getElementById('data').value = data.data;
+                    document.getElementById('descricao').value = data.descricao;
+                    document.getElementById('valor').value = data.valor;
+                    document.getElementById('pagamento').value = data.pagamento;
+                    document.getElementById('nota_fiscal').value = data.nota_fiscal;
+                    document.getElementById('tituloModal').textContent = 'Editar Lançamento';
+                    var modal = new bootstrap.Modal(document.getElementById('modalCadastroFinanceiro'));
+                    modal.show();
+                });
+        });
+    });
+
+    // Ao fechar modal, limpa o formulário
+    document.getElementById('modalCadastroFinanceiro').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('id_lancamento').value = '';
+        document.getElementById('tipo').value = 'entrada';
+        atualizarCategorias();
+        document.getElementById('categoria').value = '';
+        document.getElementById('data').value = '';
+        document.getElementById('descricao').value = '';
+        document.getElementById('valor').value = '';
+        document.getElementById('pagamento').value = '';
+        document.getElementById('nota_fiscal').value = '';
+        document.getElementById('tituloModal').textContent = 'Novo Lançamento';
+    });
 });
 </script>
 </body>
