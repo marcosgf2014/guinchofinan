@@ -1,3 +1,18 @@
+<?php
+require_once '../db.php';
+$origem_val = '';
+$destino_val = '';
+if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
+    $veiculo = $conn->real_escape_string($_GET['veiculo']);
+    $sql = "SELECT origem, destino FROM veiculos WHERE CONCAT(modelo, ' - ', placa) = '$veiculo' LIMIT 1";
+    $res = $conn->query($sql);
+    if ($res && $res->num_rows > 0) {
+        $row = $res->fetch_assoc();
+        $origem_val = $row['origem'];
+        $destino_val = $row['destino'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -41,7 +56,17 @@
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
-<input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>">
+                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>">
+                </div>
+            </div>
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="origem" class="form-label">Origem</label>
+                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?php echo isset($_GET['origem']) ? htmlspecialchars($_GET['origem']) : htmlspecialchars($origem_val); ?>">
+                </div>
+                <div class="col-md-6">
+                    <label for="destino" class="form-label">Destino</label>
+                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?php echo isset($_GET['destino']) ? htmlspecialchars($_GET['destino']) : htmlspecialchars($destino_val); ?>">
                 </div>
             </div>
             <!-- Nav tabs -->

@@ -4,6 +4,8 @@ USE guincho;
 CREATE TABLE IF NOT EXISTS checklist (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente VARCHAR(100) NOT NULL,
+    origem VARCHAR(100),
+    destino VARCHAR(100),
     veiculo VARCHAR(100) NOT NULL,
     data_entrada DATETIME NOT NULL,
     quilometragem INT,

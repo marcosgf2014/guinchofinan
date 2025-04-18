@@ -2,6 +2,8 @@
 include __DIR__ . '/../db.php';
 
 $cliente = $_POST['cliente'] ?? '';
+$origem = $_POST['origem'] ?? '';
+$destino = $_POST['destino'] ?? '';
 $veiculo = $_POST['veiculo'] ?? '';
 $data_entrada = $_POST['entrada'] ?? '';
 $quilometragem = $_POST['quilometragem'] ?? '';
@@ -72,19 +74,19 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 } else {
     // INSERT
     $sql = "INSERT INTO checklist (
-        cliente, veiculo, data_entrada, quilometragem, nivel_combustivel, danos_externos, pertences, observacoes,
+        cliente, origem, destino, veiculo, data_entrada, quilometragem, nivel_combustivel, danos_externos, pertences, observacoes,
         pneus_dianteiros, pneus_traseiros, rodas_dianteiras, rodas_traseiras,
         calotas, retrovisores, palhetas, triangulo, macaco_chave, estepe,
         bancos, painel, consoles, forracao, tapetes,
         bateria, chaves, documentos, som, caixa_selada,
         fotos, assinatura_cliente, assinatura_responsavel
     ) VALUES (
-        ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+        ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
     )";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        'sssissssssiiiiiiiiiiiiiiiiissss',
-        $cliente, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
+        'ssssissssssiiiiiiiiiiiiiiiiissss',
+        $cliente, $origem, $destino, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
         $pneus_dianteiros, $pneus_traseiros, $rodas_dianteiras, $rodas_traseiras,
         $calotas, $retrovisores, $palhetas, $triangulo, $macaco_chave, $estepe,
         $bancos, $painel, $consoles, $forracao, $tapetes,

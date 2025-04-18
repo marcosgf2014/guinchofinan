@@ -51,8 +51,19 @@ if (isset($_GET['id'])) {
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); $dataAtual = date('Y-m-d\TH:i'); ?>
-<input type="datetime-local" class="form-control" id="entrada" value="<?= $dataAtual ?>" readonly disabled>
-<input type="hidden" name="entrada" value="<?= $dataAtual ?>">
+                    <input type="datetime-local" class="form-control" id="entrada" value="<?= $dataAtual ?>" readonly disabled>
+                    <input type="hidden" name="entrada" value="<?= $dataAtual ?>">
+                </div>
+            </div>
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="origem" class="form-label">Origem</label>
+                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?php echo isset($_GET['origem']) ? htmlspecialchars($_GET['origem']) : htmlspecialchars($checklist['origem'] ?? ''); ?>" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="destino" class="form-label">Destino</label>
+                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?php echo isset($_GET['destino']) ? htmlspecialchars($_GET['destino']) : htmlspecialchars($checklist['destino'] ?? ''); ?>" readonly>
+                </div>
                 </div>
             </div>
             <ul class="nav nav-tabs mb-3" id="checklistTabs" role="tablist">
