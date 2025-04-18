@@ -262,7 +262,7 @@
                     <tbody>
                         <?php
 require_once '../db.php';
-$sql = "SELECT cliente, veiculo, entrada FROM checklist ORDER BY entrada DESC";
+$sql = "SELECT id, cliente, veiculo, entrada FROM checklist ORDER BY entrada DESC";
 $res = $conn->query($sql);
 if ($res && $res->num_rows > 0):
     while ($row = $res->fetch_assoc()):
@@ -279,7 +279,7 @@ if ($res && $res->num_rows > 0):
     <td><?= htmlspecialchars($placa) ?></td>
     <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($row['entrada']))) ?></td>
     <td class="text-center">
-        <a href="#" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
+        <a href="checklist_novo.php?id=<?= $row['id'] ?>" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
         <a href="#" class="btn-acao btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>
     </td>
 </tr>
