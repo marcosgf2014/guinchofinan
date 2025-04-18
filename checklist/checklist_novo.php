@@ -43,24 +43,16 @@ if (isset($_GET['id'])) {
                 <!-- Primeira linha: Cliente, Veículo, Data -->
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
-                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?= $edit ? htmlspecialchars($checklist['cliente']) : (isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : '') ?>" required>
+                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?= $edit ? htmlspecialchars($checklist['cliente']) : (isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : '') ?>" required <?= $edit ? 'readonly' : '' ?> >
                 </div>
                 <div class="col-md-5">
                     <label for="veiculo" class="form-label">Veículo</label>
-                    <select class="form-select" id="veiculo" name="veiculo" required>
-    <option value="">Selecione...</option>
-    <?php
-    $veiculo_selected = $edit ? $checklist['veiculo'] : (isset($_GET['veiculo']) ? $_GET['veiculo'] : '');
-    if ($veiculo_selected): ?>
-        <option value="<?= htmlspecialchars($veiculo_selected) ?>" selected><?= htmlspecialchars($veiculo_selected) ?></option>
-    <?php endif; ?>
-    <!-- Opções devem ser preenchidas dinamicamente -->
-</select>
+                    <input type="text" class="form-control" id="veiculo" name="veiculo" placeholder="Veículo" value="<?= $edit ? htmlspecialchars($checklist['veiculo']) : (isset($_GET['veiculo']) ? htmlspecialchars($_GET['veiculo']) : '') ?>" required <?= $edit ? 'readonly' : '' ?>>
                 </div>
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
-                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= date('Y-m-d\TH:i') ?>" required>
+                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= date('Y-m-d\TH:i') ?>" required <?= $edit ? 'readonly' : '' ?>>
                 </div>
             </div>
             <!-- Segunda linha: Origem, Destino -->
