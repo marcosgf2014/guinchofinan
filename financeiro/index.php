@@ -67,9 +67,9 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
                     </div>
                     <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
                         <div class="col-md-6">
-    <label for="tipo" class="form-label">Receita/Despesas</label>
+    <label for="tipo" class="form-label">Receitas/Despesas</label>
 <select class="form-select" id="tipo" name="tipo">
-    <option value="entrada">Receita</option>
+    <option value="entrada">Receitas</option>
     <option value="saida">Despesas</option>
 </select>
 </div>
@@ -86,9 +86,10 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
     <label for="data" class="form-label">Data</label>
     <input type="date" class="form-control" id="data" name="data">
 </div>
-<div class="col-md-6">
+
+<div class="col-12">
     <label for="descricao" class="form-label">Descrição</label>
-    <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Descrição">
+    <textarea class="form-control" id="descricao" name="descricao" placeholder="Descrição" rows="3"></textarea>
 </div>
 <div class="col-md-6">
     <label for="valor" class="form-label">Valor</label>
@@ -97,14 +98,20 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 <div class="col-md-6">
     <label for="pagamento" class="form-label">Pagamento</label>
     <select class="form-select" id="pagamento" name="pagamento">
-        <option value="">Selecione...</option>
-        <option value="Dinheiro">Dinheiro</option>
-        <option value="Pix">Pix</option>
-        <option value="Cartão">Cartão</option>
-        <option value="Boleto">Boleto</option>
-        <option value="Transferência">Transferência</option>
-        <option value="Outro">Outro</option>
-    </select>
+    <option value="">Selecione...</option>
+    <option value="Pendente">Pendente</option>
+    <option value="Dinheiro">Dinheiro</option>
+    <option value="PJ - Banco do Brasil">PJ - Banco do Brasil</option>
+    <option value="PJ - Mercado Pago">PJ - Mercado Pago</option>
+    <option value="PJ - Outros">PJ - Outros</option>
+    <option value="PF - Bradesco">PF - Bradesco</option>
+    <option value="PF - Itaú">PF - Itaú</option>
+    <option value="PF - Santander">PF - Santander</option>
+    <option value="PF - Mercado Pago">PF - Mercado Pago</option>
+    <option value="PF - Porto Seguro">PF - Porto Seguro</option>
+    <option value="PF - Caixa">PF - Caixa</option>
+    <option value="PF - Outros">PF - Outros</option>
+</select>
 </div>
 <div class="col-md-6">
     <label for="nota_fiscal" class="form-label">Nota Fiscal</label>

@@ -8,8 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $valor = $conn->real_escape_string($_POST['valor'] ?? '');
     $pagamento = $conn->real_escape_string($_POST['pagamento'] ?? '');
     $nota_fiscal = $conn->real_escape_string($_POST['nota_fiscal'] ?? '');
+    $status = $conn->real_escape_string($_POST['status'] ?? 'Pendente');
     if ($data && $valor && $tipo) {
-        $sql = "INSERT INTO financeiro (tipo, categoria, data, descricao, valor, pagamento, nota_fiscal) VALUES ('$tipo', '$categoria', '$data', '$descricao', '$valor', '$pagamento', '$nota_fiscal')";
+        $sql = "INSERT INTO financeiro (tipo, categoria, data, descricao, valor, pagamento, nota_fiscal, status) VALUES ('$tipo', '$categoria', '$data', '$descricao', '$valor', '$pagamento', '$nota_fiscal', '$status')";
         $conn->query($sql);
     }
     header('Location: index.php');
