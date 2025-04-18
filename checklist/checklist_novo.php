@@ -24,6 +24,7 @@
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Novo Checklist</h1>
         <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
             <div class="row mb-3 align-items-end">
+                <!-- Primeira linha: Cliente, Veículo, Data -->
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
                     <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?php echo isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : ''; ?>" required>
@@ -41,7 +42,18 @@
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
-<input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>" required>
+                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>" required>
+                </div>
+            </div>
+            <!-- Segunda linha: Origem, Destino -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="origem" class="form-label">Origem</label>
+                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="destino" class="form-label">Destino</label>
+                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" required>
                 </div>
             </div>
             <!-- Nav tabs -->
@@ -233,5 +245,6 @@
         </form>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="checklist_novo.js"></script>
 </body>
 </html>
