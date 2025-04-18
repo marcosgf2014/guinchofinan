@@ -1,8 +1,3 @@
-<?php if(isset($_GET['msg'])): ?>
-  <div class="alert alert-success mt-3">
-    <?= htmlspecialchars($_GET['msg']) ?>
-  </div>
-<?php endif; ?>
 
 <html lang="pt-br">
 <head>
@@ -26,6 +21,11 @@
         </nav>
     </aside>
     <main class="main-content container py-4">
+    <?php if(isset($_GET['msg'])): ?>
+      <div class="alert alert-success mt-3">
+        <?= htmlspecialchars($_GET['msg']) ?>
+      </div>
+    <?php endif; ?>
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Checklist</h1>
         <div class="row mb-4">
             <div class="col-md-8">
