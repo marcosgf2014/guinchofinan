@@ -56,7 +56,7 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
                         <h5 class="modal-title" id="modalCadastroFinanceiroLabel"><i class="fas fa-coins"></i> <span id="tituloModal">Novo Lançamento</span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
-                    <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
+                    <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data" id="formFinanceiro">
     <input type="hidden" id="id_lancamento" name="id_lancamento" value="">
 
                         <div class="col-md-6">
@@ -68,7 +68,8 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 </div>
 <div class="col-md-6">
     <label for="categoria" class="form-label">Categoria</label>
-    <select class="form-select" id="categoria" name="categoria">
+    <select class="form-select" id="categoria" name="categoria" required>
+    <option value="">Selecione...</option>
     <option value="">Selecione...</option>
     <option value="Frete">Frete</option>
     <option value="Guincho">Guincho</option>
@@ -86,7 +87,7 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 </div>
 <div class="col-md-6">
     <label for="valor" class="form-label">Valor</label>
-    <input type="number" step="0.01" class="form-control" id="valor" name="valor" placeholder="Valor">
+    <input type="number" step="0.01" class="form-control" id="valor" name="valor" placeholder="Valor" required>
 </div>
 <div class="col-md-6">
     <label for="pagamento" class="form-label">Pagamento</label>
@@ -172,7 +173,7 @@ if ($res && $res->num_rows > 0) {
         echo '<tr>';
         echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Saída') . '</td>';
         echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
-        echo '<td>' . htmlspecialchars($row['data'] ?? '') . '</td>';
+        echo '<td>' . (!empty($row['data']) ? date('d-m-Y', strtotime($row['data'])) : '') . '</td>';
         echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
         echo '<td>R$ ' . number_format($row['valor'] ?? 0, 2, ',', '.') . '</td>';
         echo '<td>' . htmlspecialchars($row['pagamento'] ?? '') . '</td>';
@@ -282,6 +283,32 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('tituloModal').textContent = 'Novo Lançamento';
     });
 });
+// Validação dos campos obrigatórios no modal financeiro
+    document.getElementById('formFinanceiro').addEventListener('submit', function(e) {
+        let categoria = document.getElementById('categoria');
+        let valor = document.getElementById('valor');
+        let valido = true;
+        // Remove classes anteriores
+        categoria.classList.remove('is-invalid');
+        valor.classList.remove('is-invalid');
+        // Categoria
+        if (!categoria.value) {
+            categoria.classList.add('is-invalid');
+            valido = false;
+        }
+        // Valor
+        if (!valor.value || parseFloat(valor.value) <= 0) {
+            valor.classList.add('is-invalid');
+            valido = false;
+        }
+        if (!valido) {
+            e.preventDefault();
+        }
+    });
 </script>
+<style>
+.is-invalid { border-color: #dc3545 !important; }
+.is-invalid:focus { box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25) !important; }
+</style>
 </body>
 </html>

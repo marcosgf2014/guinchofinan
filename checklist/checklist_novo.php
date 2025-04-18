@@ -59,11 +59,11 @@ if (isset($_GET['id'])) {
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="origem" class="form-label">Origem</label>
-                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?= $edit ? htmlspecialchars($checklist['origem']) : '' ?>" required>
+                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?= $edit ? htmlspecialchars($checklist['origem']) : '' ?>">
                 </div>
                 <div class="col-md-6">
                     <label for="destino" class="form-label">Destino</label>
-                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?= $edit ? htmlspecialchars($checklist['destino']) : '' ?>" required>
+                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?= $edit ? htmlspecialchars($checklist['destino']) : '' ?>">
                 </div>
             </div>
             <!-- Nav tabs -->

@@ -9,6 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pagamento = $conn->real_escape_string($_POST['pagamento'] ?? '');
     $nota_fiscal = $conn->real_escape_string($_POST['nota_fiscal'] ?? '');
     $id_lancamento = $conn->real_escape_string($_POST['id_lancamento'] ?? '');
+    if (!$categoria || !$valor) {
+        echo '<div style="padding:2rem;text-align:center;color:red;"><h2>É obrigatório preencher a categoria e o valor!</h2><a href="javascript:history.back()">Voltar</a></div>';
+        exit;
+    }
     if ($data && $valor && $tipo) {
         if ($id_lancamento) {
             $sql = "UPDATE financeiro SET tipo='$tipo', categoria='$categoria', data='$data', descricao='$descricao', valor='$valor', pagamento='$pagamento', nota_fiscal='$nota_fiscal' WHERE id='$id_lancamento'";
