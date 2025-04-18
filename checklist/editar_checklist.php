@@ -50,7 +50,9 @@ if (isset($_GET['id'])) {
                 </div>
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
-                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= date('Y-m-d\TH:i', strtotime($checklist['data_entrada'])) ?>">
+                    <?php date_default_timezone_set('America/Sao_Paulo'); $dataAtual = date('Y-m-d\TH:i'); ?>
+<input type="datetime-local" class="form-control" id="entrada" value="<?= $dataAtual ?>" readonly disabled>
+<input type="hidden" name="entrada" value="<?= $dataAtual ?>">
                 </div>
             </div>
             <ul class="nav nav-tabs mb-3" id="checklistTabs" role="tablist">
