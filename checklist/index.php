@@ -280,7 +280,7 @@ if ($res && $res->num_rows > 0):
     <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($row['entrada']))) ?></td>
     <td class="text-center">
         <a href="checklist_novo.php?id=<?= $row['id'] ?>" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
-        <a href="#" class="btn-acao btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>
+        <a href="excluir.php?id=<?= $row['id'] ?>" class="btn-acao btn-excluir" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este checklist?');"><i class="fas fa-trash"></i></a>
     </td>
 </tr>
 <?php endwhile;

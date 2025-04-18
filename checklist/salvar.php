@@ -39,13 +39,21 @@ $documentos = checkboxToInt('documentos');
 $som = checkboxToInt('som');
 $caixa_selada = checkboxToInt('caixa_selada');
 
-$sql = "INSERT INTO checklist (
-    cliente, veiculo, entrada, origem, destino, quilometragem, combustivel, pneus_dianteiros, pneus_traseiros, rodas_dianteiras, rodas_traseiras, observacoes, pertences, danos,
-    calotas, retrovisores, palhetas, triangulo, macaco, estepe, bancos, painel, consoles, forracao, tapetes, bateria, chaves, documentos, som, caixa_selada
-) VALUES (
-    '$cliente', '$veiculo', '$entrada', '$origem', '$destino', ".($quilometragem === 'NULL' ? "NULL" : $quilometragem).", '$combustivel', '$pneus_dianteiros', '$pneus_traseiros', '$rodas_dianteiras', '$rodas_traseiras', '$observacoes', '$pertences', $danos,
-    $calotas, $retrovisores, $palhetas, $triangulo, $macaco, $estepe, $bancos, $painel, $consoles, $forracao, $tapetes, $bateria, $chaves, $documentos, $som, $caixa_selada
-)";
+if (isset($_POST['id']) && is_numeric($_POST['id'])) {
+    $id = (int)$_POST['id'];
+    $sql = "UPDATE checklist SET 
+        cliente='$cliente', veiculo='$veiculo', entrada='$entrada', origem='$origem', destino='$destino', quilometragem=".($quilometragem === 'NULL' ? "NULL" : $quilometragem).", combustivel='$combustivel', pneus_dianteiros='$pneus_dianteiros', pneus_traseiros='$pneus_traseiros', rodas_dianteiras='$rodas_dianteiras', rodas_traseiras='$rodas_traseiras', observacoes='$observacoes', pertences='$pertences', danos=$danos,
+        calotas=$calotas, retrovisores=$retrovisores, palhetas=$palhetas, triangulo=$triangulo, macaco=$macaco, estepe=$estepe, bancos=$bancos, painel=$painel, consoles=$consoles, forracao=$forracao, tapetes=$tapetes, bateria=$bateria, chaves=$chaves, documentos=$documentos, som=$som, caixa_selada=$caixa_selada
+        WHERE id=$id";
+} else {
+    $sql = "INSERT INTO checklist (
+        cliente, veiculo, entrada, origem, destino, quilometragem, combustivel, pneus_dianteiros, pneus_traseiros, rodas_dianteiras, rodas_traseiras, observacoes, pertences, danos,
+        calotas, retrovisores, palhetas, triangulo, macaco, estepe, bancos, painel, consoles, forracao, tapetes, bateria, chaves, documentos, som, caixa_selada
+    ) VALUES (
+        '$cliente', '$veiculo', '$entrada', '$origem', '$destino', ".($quilometragem === 'NULL' ? "NULL" : $quilometragem).", '$combustivel', '$pneus_dianteiros', '$pneus_traseiros', '$rodas_dianteiras', '$rodas_traseiras', '$observacoes', '$pertences', $danos,
+        $calotas, $retrovisores, $palhetas, $triangulo, $macaco, $estepe, $bancos, $painel, $consoles, $forracao, $tapetes, $bateria, $chaves, $documentos, $som, $caixa_selada
+    )";
+}
 
 if ($conn->query($sql)) {
     header('Location: index.php?msg=checklist_salvo');
