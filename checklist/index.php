@@ -242,28 +242,32 @@
                 <table class="table table-striped table-hover align-middle shadow-sm">
                     <thead class="table-dark">
                         <tr>
-                            <th>Título</th>
-                            <th>Itens</th>
+                            <th>Nome</th>
+                            <th>Veículo</th>
+                            <th>Data</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Exemplo de linha; substitua por PHP para listar do banco -->
-                        <tr>
-                            <td>Checklist de Caminhão</td>
-                            <td>
-                                <ul class="mb-0">
-                                    <li>Verificar óleo</li>
-                                    <li>Verificar pneus</li>
-                                    <li>Verificar documentos</li>
-                                </ul>
-                            </td>
-                            <td class="text-center">
-                                <a href="#" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
-                                <a href="#" class="btn-acao btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>
-                        <!-- Fim exemplo -->
+                        <?php
+                        include __DIR__ . '/../db.php';
+                        $sql = "SELECT id, cliente, veiculo, data_entrada FROM checklist ORDER BY id DESC";
+                        $result = $conn->query($sql);
+                        if ($result && $result->num_rows > 0):
+                            while($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['cliente']) ?></td>
+                                <td><?= htmlspecialchars($row['veiculo']) ?></td>
+                                <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($row['data_entrada']))) ?></td>
+                                <td class="text-center">
+                                    <a href="#" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="btn-acao btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        <?php endwhile;
+                        else: ?>
+                            <tr><td colspan="4" class="text-center">Nenhum checklist cadastrado.</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
