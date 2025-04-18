@@ -28,9 +28,12 @@
             </div>
         <?php endif; ?>
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Checklist</h1>
-        <div class="row mb-4">
+        <div class="row mb-4 align-items-center">
             <div class="col-md-8">
-                <!-- Espaço para busca futura, se desejar -->
+                <form class="d-flex" method="get" action="index.php">
+                    <input class="form-control me-2" type="search" name="busca" placeholder="Buscar por veículo, placa, item, observação..." value="<?= isset($_GET['busca']) ? htmlspecialchars($_GET['busca']) : '' ?>">
+                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                </form>
             </div>
             <div class="col-md-4 text-end">
                 <a href="checklist_novo.php" class="btn btn-success px-4">
@@ -262,7 +265,25 @@
                     <tbody>
                         <?php
 require_once '../db.php';
-$sql = "SELECT id, cliente, veiculo, entrada FROM checklist ORDER BY entrada DESC";
+$where = '';
+if (isset($_GET['busca']) && $_GET['busca'] !== '') {
+    $busca = $conn->real_escape_string($_GET['busca']);
+    $where = "WHERE " .
+        "cliente LIKE '%$busca%' OR " .
+        "veiculo LIKE '%$busca%' OR " .
+        "entrada LIKE '%$busca%' OR " .
+        "origem LIKE '%$busca%' OR " .
+        "destino LIKE '%$busca%' OR " .
+        "quilometragem LIKE '%$busca%' OR " .
+        "combustivel LIKE '%$busca%' OR " .
+        "pneus_dianteiros LIKE '%$busca%' OR " .
+        "pneus_traseiros LIKE '%$busca%' OR " .
+        "rodas_dianteiras LIKE '%$busca%' OR " .
+        "rodas_traseiras LIKE '%$busca%' OR " .
+        "observacoes LIKE '%$busca%' OR " .
+        "pertences LIKE '%$busca%'";
+}
+$sql = "SELECT id, cliente, veiculo, entrada FROM checklist ".$where." ORDER BY entrada DESC";
 $res = $conn->query($sql);
 if ($res && $res->num_rows > 0):
     while ($row = $res->fetch_assoc()):
