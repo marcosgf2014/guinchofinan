@@ -26,11 +26,11 @@
             <div class="row mb-3 align-items-end">
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
-                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?php echo isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : ''; ?>" required>
+                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?php echo isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : ''; ?>">
                 </div>
                 <div class="col-md-5">
                     <label for="veiculo" class="form-label">Veículo</label>
-                    <select class="form-select" id="veiculo" name="veiculo" required>
+                    <select class="form-select" id="veiculo" name="veiculo">
                         <option value="">Selecione...</option>
                         <?php if (isset($_GET['veiculo'])): ?>
                             <option value="<?php echo htmlspecialchars($_GET['veiculo']); ?>" selected><?php echo htmlspecialchars($_GET['veiculo']); ?></option>
@@ -41,7 +41,7 @@
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
-<input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>" required>
+<input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>">
                 </div>
             </div>
             <!-- Nav tabs -->
@@ -65,11 +65,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="quilometragem" class="form-label">Quilometragem</label>
-                            <input type="number" class="form-control" id="quilometragem" name="quilometragem" required>
+                            <input type="number" class="form-control" id="quilometragem" name="quilometragem">
                         </div>
                         <div class="col-md-6">
                             <label for="combustivel" class="form-label">Nível de Combustível</label>
-                            <select class="form-select" id="combustivel" name="combustivel" required>
+                            <select class="form-select" id="combustivel" name="combustivel">
                                 <option value="">Selecione</option>
                                 <option value="1/4">1/4</option>
                                 <option value="1/2">1/2</option>
