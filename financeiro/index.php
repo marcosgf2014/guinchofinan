@@ -67,23 +67,20 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
                     </div>
                     <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
                         <div class="col-md-6">
-    <label for="tipo" class="form-label">Receita</label>
-    <select class="form-select" id="tipo" name="tipo">
-        <option value="entrada">Receita</option>
-        <option value="saida">Saída</option>
-    </select>
+    <label for="tipo" class="form-label">Receita/Despesas</label>
+<select class="form-select" id="tipo" name="tipo">
+    <option value="entrada">Receita</option>
+    <option value="saida">Despesas</option>
+</select>
 </div>
 <div class="col-md-6">
     <label for="categoria" class="form-label">Categoria</label>
     <select class="form-select" id="categoria" name="categoria">
-        <option value="">Selecione...</option>
-        <option value="Serviço">Serviço</option>
-        <option value="Venda">Venda</option>
-        <option value="Combustível">Combustível</option>
-        <option value="Manutenção">Manutenção</option>
-        <option value="Salário">Salário</option>
-        <option value="Outros">Outros</option>
-    </select>
+    <option value="">Selecione...</option>
+    <option value="Frete">Frete</option>
+    <option value="Guincho">Guincho</option>
+    <option value="Extra">Extra</option>
+</select>
 </div>
 <div class="col-md-6">
     <label for="data" class="form-label">Data</label>
@@ -169,5 +166,51 @@ if ($res && $res->num_rows > 0) {
     <!-- Bootstrap JS Bundle (necessário para modal funcionar) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+// Categorias para cada tipo
+const categoriasReceita = [
+    {value: '', label: 'Selecione...'},
+    {value: 'Frete', label: 'Frete'},
+    {value: 'Guincho', label: 'Guincho'},
+    {value: 'Extra', label: 'Extra'}
+];
+const categoriasSaida = [
+    {value: '', label: 'Selecione...'},
+    {value: 'Carro - Fox', label: 'Carro - Fox'},
+    {value: 'Carro - F-350', label: 'Carro - F-350'},
+    {value: 'Carro - Diversos', label: 'Carro - Diversos'},
+    {value: 'Refeições', label: 'Refeições'},
+    {value: 'Mercado', label: 'Mercado'},
+    {value: 'Bancos', label: 'Bancos'},
+    {value: 'Telefones', label: 'Telefones'},
+    {value: 'Roupas', label: 'Roupas'},
+    {value: 'Saúde', label: 'Saúde'},
+    {value: 'Crianças', label: 'Crianças'},
+    {value: 'Google', label: 'Google'},
+    {value: 'Compras', label: 'Compras'},
+    {value: 'Diversos', label: 'Diversos'},
+    {value: 'Impostos', label: 'Impostos'},
+    {value: 'Ajudantes', label: 'Ajudantes'}
+];
+function atualizarCategorias() {
+    const tipo = document.getElementById('tipo').value;
+    const cat = document.getElementById('categoria');
+    let opcoes = tipo === 'entrada' ? categoriasReceita : categoriasSaida;
+    let valorAtual = cat.value;
+    cat.innerHTML = '';
+    opcoes.forEach(function(opt) {
+        let o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        cat.appendChild(o);
+    });
+    // Se valor atual existir na nova lista, mantém selecionado
+    if ([...cat.options].some(o=>o.value===valorAtual)) cat.value = valorAtual;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tipo').addEventListener('change', atualizarCategorias);
+    atualizarCategorias();
+});
+</script>
 </body>
 </html>
