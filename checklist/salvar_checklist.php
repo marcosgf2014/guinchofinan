@@ -6,7 +6,7 @@ $veiculo = $_POST['veiculo'] ?? '';
 $data_entrada = $_POST['entrada'] ?? '';
 $quilometragem = $_POST['quilometragem'] ?? '';
 $nivel_combustivel = $_POST['combustivel'] ?? '';
-$danos_externos = isset($_POST['danos']) ? 1 : 0;
+$danos_externos = isset($_POST['danos_externos']) ? 1 : 0;
 $pertences = $_POST['pertences'] ?? '';
 $observacoes = $_POST['observacoes'] ?? '';
 
@@ -19,7 +19,7 @@ $calotas = isset($_POST['calotas']) ? 1 : 0;
 $retrovisores = isset($_POST['retrovisores']) ? 1 : 0;
 $palhetas = isset($_POST['palhetas']) ? 1 : 0;
 $triangulo = isset($_POST['triangulo']) ? 1 : 0;
-$macaco_chave = isset($_POST['macaco']) ? 1 : 0;
+$macaco_chave = isset($_POST['macaco_chave']) ? 1 : 0;
 $estepe = isset($_POST['estepe']) ? 1 : 0;
 
 $bancos = isset($_POST['bancos']) ? 1 : 0;
@@ -39,35 +39,66 @@ $fotos = isset($_FILES['fotos']) ? json_encode($_FILES['fotos']['name']) : '';
 $assinatura_cliente = $_FILES['assinatura_cliente']['name'] ?? '';
 $assinatura_responsavel = $_FILES['assinatura_responsavel']['name'] ?? '';
 
-$sql = "INSERT INTO checklist (
-    cliente, veiculo, data_entrada, quilometragem, nivel_combustivel, danos_externos, pertences, observacoes,
-    pneus_dianteiros, pneus_traseiros, rodas_dianteiras, rodas_traseiras,
-    calotas, retrovisores, palhetas, triangulo, macaco_chave, estepe,
-    bancos, painel, consoles, forracao, tapetes,
-    bateria, chaves, documentos, som, caixa_selada,
-    fotos, assinatura_cliente, assinatura_responsavel
-) VALUES (
-    ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
-)";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param(
-    'sssissssssiiiiiiiiiiiiiiiiissss',
-    $cliente, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
-    $pneus_dianteiros, $pneus_traseiros, $rodas_dianteiras, $rodas_traseiras,
-    $calotas, $retrovisores, $palhetas, $triangulo, $macaco_chave, $estepe,
-    $bancos, $painel, $consoles, $forracao, $tapetes,
-    $bateria, $chaves, $documentos, $som, $caixa_selada,
-    $fotos, $assinatura_cliente, $assinatura_responsavel
-);
-
-if ($stmt->execute()) {
-    header('Location: index.php?msg=Checklist salvo com sucesso!');
-    exit;
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    // UPDATE
+    $id = intval($_GET['id']);
+    $sql = "UPDATE checklist SET
+        cliente=?, veiculo=?, data_entrada=?, quilometragem=?, nivel_combustivel=?, danos_externos=?, pertences=?, observacoes=?,
+        pneus_dianteiros=?, pneus_traseiros=?, rodas_dianteiras=?, rodas_traseiras=?,
+        calotas=?, retrovisores=?, palhetas=?, triangulo=?, macaco_chave=?, estepe=?,
+        bancos=?, painel=?, consoles=?, forracao=?, tapetes=?,
+        bateria=?, chaves=?, documentos=?, som=?, caixa_selada=?,
+        fotos=?, assinatura_cliente=?, assinatura_responsavel=?
+        WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        'sssissssssiiiiiiiiiiiiiiiiissssi',
+        $cliente, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
+        $pneus_dianteiros, $pneus_traseiros, $rodas_dianteiras, $rodas_traseiras,
+        $calotas, $retrovisores, $palhetas, $triangulo, $macaco_chave, $estepe,
+        $bancos, $painel, $consoles, $forracao, $tapetes,
+        $bateria, $chaves, $documentos, $som, $caixa_selada,
+        $fotos, $assinatura_cliente, $assinatura_responsavel,
+        $id
+    );
+    if ($stmt->execute()) {
+        header('Location: index.php?msg=Checklist atualizado com sucesso!');
+        exit;
+    } else {
+        header('Location: index.php?msg=Erro ao atualizar checklist!');
+        exit;
+    }
+    $stmt->close();
 } else {
-    header('Location: index.php?msg=Erro ao salvar checklist!');
-    exit;
+    // INSERT
+    $sql = "INSERT INTO checklist (
+        cliente, veiculo, data_entrada, quilometragem, nivel_combustivel, danos_externos, pertences, observacoes,
+        pneus_dianteiros, pneus_traseiros, rodas_dianteiras, rodas_traseiras,
+        calotas, retrovisores, palhetas, triangulo, macaco_chave, estepe,
+        bancos, painel, consoles, forracao, tapetes,
+        bateria, chaves, documentos, som, caixa_selada,
+        fotos, assinatura_cliente, assinatura_responsavel
+    ) VALUES (
+        ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+    )";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        'sssissssssiiiiiiiiiiiiiiiiissss',
+        $cliente, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
+        $pneus_dianteiros, $pneus_traseiros, $rodas_dianteiras, $rodas_traseiras,
+        $calotas, $retrovisores, $palhetas, $triangulo, $macaco_chave, $estepe,
+        $bancos, $painel, $consoles, $forracao, $tapetes,
+        $bateria, $chaves, $documentos, $som, $caixa_selada,
+        $fotos, $assinatura_cliente, $assinatura_responsavel
+    );
+    if ($stmt->execute()) {
+        header('Location: index.php?msg=Checklist salvo com sucesso!');
+        exit;
+    } else {
+        header('Location: index.php?msg=Erro ao salvar checklist!');
+        exit;
+    }
+    $stmt->close();
 }
-$stmt->close();
 $conn->close();
 ?>
