@@ -47,16 +47,7 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 </div>
 
         <h1 class="mb-4"><i class="fas fa-coins"></i> Financeiro</h1>
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <!-- Espaço para busca futura, se desejar -->
-            </div>
-            <div class="col-md-4 text-end">
-                <button type="button" class="btn btn-success px-4" data-bs-toggle="modal" data-bs-target="#modalCadastroFinanceiro">
-                    <i class="fas fa-plus"></i> Novo Lançamento
-                </button>
-            </div>
-        </div>
+        
         <!-- Modal Cadastro Financeiro -->
         <div class="modal fade" id="modalCadastroFinanceiro" tabindex="-1" aria-labelledby="modalCadastroFinanceiroLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -126,8 +117,24 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
                 </div>
             </div>
         </div>
-        <section class="mt-4">
-            <h2 class="mb-3"><i class="fas fa-list"></i> Lançamentos Financeiros</h2>
+        <div class="mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8 mb-2 mb-md-0">
+            <form class="d-flex" method="get" action="index.php">
+                <input class="form-control me-2" type="search" name="busca" placeholder="Buscar por descrição, categoria, pagamento, nota fiscal, tipo..." value="<?= isset($_GET['busca']) ? htmlspecialchars($_GET['busca']) : '' ?>">
+                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search me-1"></i> Buscar</button>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <button type="button" class="btn btn-success px-4" data-bs-toggle="modal" data-bs-target="#modalCadastroFinanceiro">
+                <i class="fas fa-plus me-1"></i> Novo Lançamento
+            </button>
+        </div>
+    </div>
+</div>
+<section class="mt-4">
+    <h2 class="mb-3"><i class="fas fa-list"></i> Lançamentos Financeiros</h2>
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover align-middle shadow-sm">
                     <thead class="table-dark">
@@ -145,7 +152,20 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
                     <tbody>
 <?php
 require_once '../db.php';
-$sql = "SELECT * FROM financeiro ORDER BY data DESC, id DESC";
+$where = '';
+if (!empty($_GET['busca'])) {
+    $busca = $conn->real_escape_string($_GET['busca']);
+    $where = "WHERE (
+        descricao LIKE '%$busca%' OR 
+        categoria LIKE '%$busca%' OR 
+        pagamento LIKE '%$busca%' OR 
+        nota_fiscal LIKE '%$busca%' OR 
+        tipo LIKE '%$busca%' OR 
+        data LIKE '%$busca%' OR
+        valor LIKE '%$busca%'
+    )";
+}
+$sql = "SELECT * FROM financeiro $where ORDER BY data DESC, id DESC";
 $res = $conn->query($sql);
 if ($res && $res->num_rows > 0) {
     while ($row = $res->fetch_assoc()) {
