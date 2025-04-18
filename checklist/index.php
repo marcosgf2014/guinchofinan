@@ -21,6 +21,12 @@
         </nav>
     </aside>
     <main class="main-content container py-4">
+        <?php if (isset($_GET['msg']) && $_GET['msg'] === 'checklist_salvo'): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top:10px;">
+                Checklist cadastrado com sucesso!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Checklist</h1>
         <div class="row mb-4">
             <div class="col-md-8">

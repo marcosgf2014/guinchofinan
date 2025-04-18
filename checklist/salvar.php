@@ -48,7 +48,8 @@ $sql = "INSERT INTO checklist (
 )";
 
 if ($conn->query($sql)) {
-    echo '<div style="padding:2rem;text-align:center;"><h2>Checklist salvo com sucesso!</h2><a href="index.php">Voltar para listagem</a></div>';
+    header('Location: index.php?msg=checklist_salvo');
+    exit;
 } else {
     echo '<div style="padding:2rem;text-align:center;color:red;"><h2>Erro ao salvar checklist!</h2><p>'.$conn->error.'</p><a href="javascript:history.back()">Voltar</a></div>';
 }
