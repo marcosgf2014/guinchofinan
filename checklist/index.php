@@ -252,28 +252,42 @@
                 <table class="table table-striped table-hover align-middle shadow-sm">
                     <thead class="table-dark">
                         <tr>
-                            <th>Título</th>
-                            <th>Itens</th>
+                            <th>Cliente</th>
+                            <th>Veículo</th>
+                            <th>Placa</th>
+                            <th>Data</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Exemplo de linha; substitua por PHP para listar do banco -->
-                        <tr>
-                            <td>Checklist de Caminhão</td>
-                            <td>
-                                <ul class="mb-0">
-                                    <li>Verificar óleo</li>
-                                    <li>Verificar pneus</li>
-                                    <li>Verificar documentos</li>
-                                </ul>
-                            </td>
-                            <td class="text-center">
-                                <a href="#" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
-                                <a href="#" class="btn-acao btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>
-                        <!-- Fim exemplo -->
+                        <?php
+require_once '../db.php';
+$sql = "SELECT cliente, veiculo, entrada FROM checklist ORDER BY entrada DESC";
+$res = $conn->query($sql);
+if ($res && $res->num_rows > 0):
+    while ($row = $res->fetch_assoc()):
+        // Extrai placa do campo veiculo, se vier como "Modelo - Placa"
+        $modelo = $row['veiculo'];
+        $placa = '';
+        if (strpos($modelo, ' - ') !== false) {
+            [$modelo, $placa] = explode(' - ', $modelo, 2);
+        }
+?>
+<tr>
+    <td><?= htmlspecialchars($row['cliente']) ?></td>
+    <td><?= htmlspecialchars($modelo) ?></td>
+    <td><?= htmlspecialchars($placa) ?></td>
+    <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($row['entrada']))) ?></td>
+    <td class="text-center">
+        <a href="#" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
+        <a href="#" class="btn-acao btn-excluir" title="Excluir"><i class="fas fa-trash"></i></a>
+    </td>
+</tr>
+<?php endwhile;
+else:
+?>
+<tr><td colspan="5" class="text-center">Nenhum checklist cadastrado.</td></tr>
+<?php endif; ?>
                     </tbody>
                 </table>
             </div>
