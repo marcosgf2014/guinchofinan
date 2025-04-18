@@ -61,6 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 '$origem', '$destino', '$obs'
             )";
             if ($conn->query($sql)) {
+                // Inserir lançamento financeiro automático
+                $descricao_fin = trim(($modelo ? $modelo : $tipo_veiculo) . ' - ' . $placa);
+                $valor_fin = floatval($valor_servico);
+                $data_fin = date('Y-m-d');
+                $sql_fin = "INSERT INTO financeiro (tipo, categoria, data, descricao, valor, pagamento, nota_fiscal) VALUES ('entrada', 'Guincho', '$data_fin', '$descricao_fin', $valor_fin, '', '')";
+                $conn->query($sql_fin);
                 header('Location: index.php?msg=Veículo cadastrado com sucesso!&type=success');
                 exit;
             } else {
