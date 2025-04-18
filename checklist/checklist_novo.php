@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
-                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= $edit ? date('Y-m-d\TH:i', strtotime($checklist['entrada'])) : date('Y-m-d\TH:i') ?>" required>
+                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= date('Y-m-d\TH:i') ?>" required>
                 </div>
             </div>
             <!-- Segunda linha: Origem, Destino -->
