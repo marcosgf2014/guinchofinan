@@ -111,11 +111,12 @@
                                                 <option>Novo</option>
                                                 <option>Ruim</option>
                                             </select>
-                                        </div>
+                                        </div>s
                                         <div class="mb-2">
                                             <label class="form-label">Rodas Dianteiras</label>
                                             <select class="form-select" name="rodas_dianteiras">
                                                 <option value="">Selecione</option>
+                                                <option>Bom</option>
                                                 <option>Novo</option>
                                                 <option>Usado</option>
                                             </select>
@@ -124,6 +125,7 @@
                                             <label class="form-label">Rodas Traseiras</label>
                                             <select class="form-select" name="rodas_traseiras">
                                                 <option value="">Selecione</option>
+                                                <option>Bom</option>
                                                 <option>Novo</option>
                                                 <option>Usado</option>
                                             </select>

@@ -77,11 +77,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="quilometragem" class="form-label">Quilometragem</label>
-                            <input type="number" class="form-control" id="quilometragem" name="quilometragem" required>
+                            <input type="number" class="form-control" id="quilometragem" name="quilometragem">
                         </div>
                         <div class="col-md-6">
                             <label for="combustivel" class="form-label">Nível de Combustível</label>
-                            <select class="form-select" id="combustivel" name="combustivel" required>
+                            <select class="form-select" id="combustivel" name="combustivel">
                                 <option value="">Selecione</option>
                                 <option value="1/4">1/4</option>
                                 <option value="1/2">1/2</option>
@@ -131,16 +131,18 @@
                                 <label class="form-label">Rodas Dianteiras</label>
                                 <select class="form-select" name="rodas_dianteiras">
                                     <option value="">Selecione</option>
+                                    <option>Bons</option>
                                     <option>Novo</option>
-                                    <option>Usado</option>
+                                    <option>Ruim</option>
                                 </select>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Rodas Traseiras</label>
                                 <select class="form-select" name="rodas_traseiras">
                                     <option value="">Selecione</option>
+                                    <option>Bons</option>
                                     <option>Novo</option>
-                                    <option>Usado</option>
+                                    <option>Ruim</option>
                                 </select>
                             </div>
                         </div>
