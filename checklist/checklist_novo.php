@@ -180,13 +180,17 @@ if (isset($_GET['id'])) {
                                 <label class="form-check-label" for="triangulo">Triângulo</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="macaco" name="macaco" <?= ($edit && $checklist['macaco']) ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="macaco">Macaco / Chave Roda</label>
-                            </div>
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="estepe" name="estepe" <?= ($edit && $checklist['estepe']) ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="estepe">Estepe</label>
-                            </div>
+    <input class="form-check-input" type="checkbox" id="macaco" name="macaco" <?= ($edit && $checklist['macaco']) ? 'checked' : '' ?>>
+    <label class="form-check-label" for="macaco">Macaco</label>
+</div>
+<div class="form-check form-switch mb-1">
+    <input class="form-check-input" type="checkbox" id="chave_roda" name="chave_roda" <?= ($edit && isset($checklist['chave_roda']) && $checklist['chave_roda']) ? 'checked' : '' ?> >
+    <label class="form-check-label" for="chave_roda">Chave do Roda</label>
+</div>
+<div class="form-check form-switch mb-1">
+    <input class="form-check-input" type="checkbox" id="estepe" name="estepe" <?= ($edit && $checklist['estepe']) ? 'checked' : '' ?>>
+    <label class="form-check-label" for="estepe">Estepe</label>
+</div>
                         </div>
                         <div class="col-md-4">
                             <h6>Interior</h6>

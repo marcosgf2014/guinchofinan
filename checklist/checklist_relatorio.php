@@ -85,7 +85,7 @@ function campo($label, $valor, $icon) {
             </div>
             <div class="col-md-6">
                 <div class="fw-bold mb-1"><i class="fas fa-toolbox"></i> Acessórios</div>
-                <?php $acessorios = ['calotas','retrovisores','palhetas','triangulo','macaco'];
+                <?php $acessorios = ['calotas','retrovisores','palhetas','triangulo','macaco','chave_roda'];
                 foreach ($acessorios as $a) {
                     if (!empty($row[$a])) {
                         echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#32a852;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst(str_replace('_',' ',$a)).'</span>';
