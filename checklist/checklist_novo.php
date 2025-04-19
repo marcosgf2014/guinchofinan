@@ -240,10 +240,139 @@ if (isset($_GET['id'])) {
                 </div>
                 <!-- Aba Fotos -->
                 <div class="tab-pane fade" id="fotos" role="tabpanel">
-                    <div class="mb-3">
-                        <label class="form-label">Adicionar Fotos do Veículo</label>
-                        <input class="form-control" type="file" name="fotos[]" id="fotos" multiple accept="image/*">
-                        <div id="previewFotos" class="row mt-3"></div>
+    <div class="mb-3">
+        <label class="form-label">Fotos do Veículo</label>
+        <div id="uploadArea" style="border:2px dashed #b5b5b5; border-radius:12px; padding:32px; text-align:center; background:#fafbfc; margin-bottom:20px;">
+            <div style="font-size:2rem; color:#bbb;"><i class="fas fa-camera"></i></div>
+            <div style="font-weight:bold; font-size:1.1rem; margin-top:8px;">Adicionar Fotos do Veículo</div>
+            <div style="color:#888; font-size:0.95rem; margin-bottom:16px;">Faça upload de imagens para documentar a condição do veículo</div>
+            <input type="file" id="inputFotos" name="fotos[]" accept="image/*" multiple style="display:none;">
+            <button type="button" class="btn btn-primary" id="btnEscolherFotos"><i class="fas fa-upload"></i> Escolher Imagens</button>
+            <div id="uploadFeedback" class="mt-2"></div>
+        </div>
+        <div id="galeriaFotos" class="row g-3"></div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnEscolher = document.getElementById('btnEscolherFotos');
+        const inputFotos = document.getElementById('inputFotos');
+        const feedback = document.getElementById('uploadFeedback');
+        const galeria = document.getElementById('galeriaFotos');
+        const uploadArea = document.getElementById('uploadArea');
+        let checklistId = document.querySelector('input[name="id"]') ? document.querySelector('input[name="id"]').value : null;
+
+        // Clique no botão abre o input
+        btnEscolher.addEventListener('click', () => inputFotos.click());
+
+        // Drag and Drop
+        uploadArea.addEventListener('dragover', e => {
+            e.preventDefault();
+            uploadArea.style.background = '#f0f4fa';
+        });
+        uploadArea.addEventListener('dragleave', e => {
+            uploadArea.style.background = '#fafbfc';
+        });
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.style.background = '#fafbfc';
+            inputFotos.files = e.dataTransfer.files;
+            enviarFotos(e.dataTransfer.files);
+        });
+
+        // Seleção via input
+        inputFotos.addEventListener('change', function () {
+            if (inputFotos.files.length) {
+                enviarFotos(inputFotos.files);
+            }
+        });
+
+        // Função para enviar fotos via AJAX
+        function enviarFotos(files) {
+            if (!checklistId) {
+                feedback.innerHTML = '<span class="text-danger">Salve o checklist antes de enviar fotos.</span>';
+                return;
+            }
+            let formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append('fotos[]', files[i]);
+            }
+            formData.append('checklist_id', checklistId);
+            feedback.innerHTML = 'Enviando...';
+            btnEscolher.disabled = true;
+            fetch('upload_foto.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    feedback.innerHTML = '<span class="text-success">Fotos enviadas!</span>';
+                    inputFotos.value = '';
+                    carregarGaleria();
+                } else {
+                    feedback.innerHTML = '<span class="text-danger">' + (data.message || 'Erro ao enviar fotos.') + '</span>';
+                }
+            })
+            .catch(() => {
+                feedback.innerHTML = '<span class="text-danger">Erro ao enviar fotos.</span>';
+            })
+            .finally(() => {
+                btnEscolher.disabled = false;
+            });
+        }
+
+        // Carregar galeria de fotos já salvas
+        function carregarGaleria() {
+            if (!checklistId) return;
+            galeria.innerHTML = '<div class="text-center text-muted">Carregando fotos...</div>';
+            fetch('listar_fotos.php?checklist_id=' + checklistId)
+                .then(res => res.json())
+                .then(data => {
+                    galeria.innerHTML = '';
+                    if (data.fotos && data.fotos.length) {
+                        data.fotos.forEach((foto, idx) => {
+                            galeria.innerHTML += `
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="card h-100 shadow-sm position-relative">
+                                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 btn-excluir-foto" data-id="${foto.id}" title="Excluir" style="z-index:2;">&times;</button>
+                                        <img src="../uploads/${foto.caminho}" class="card-img-top" style="object-fit:cover; max-height:160px;">
+                                        <div class="card-body p-2 text-center"><small>Foto ${idx+1}</small></div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        galeria.innerHTML = '<div class="text-center text-muted">Nenhuma foto enviada ainda.</div>';
+                    }
+                    // Eventos de exclusão
+                    setTimeout(() => {
+                        galeria.querySelectorAll('.btn-excluir-foto').forEach(btn => {
+                            btn.onclick = function() {
+                                if (!confirm('Tem certeza que deseja excluir esta foto?')) return;
+                                let id = this.getAttribute('data-id');
+                                fetch('excluir_foto.php', {
+                                    method: 'POST',
+                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                    body: 'id=' + encodeURIComponent(id)
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        carregarGaleria();
+                                    } else {
+                                        alert(data.message || 'Erro ao excluir foto.');
+                                    }
+                                });
+                            };
+                        });
+                    }, 100);
+                });
+        }
+        if (checklistId) carregarGaleria();
+    });
+    </script>
+
+                        </script>
                     </div>
                 </div>
                 <!-- Aba Assinaturas -->
