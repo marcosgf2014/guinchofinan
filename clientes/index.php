@@ -39,10 +39,6 @@ if ($resQtd && $rowQtd = $resQtd->fetch_assoc()) {
 ?>
 <div class="d-flex align-items-center mb-4">
     <h1 class="mb-0 me-3"><i class="fas fa-users"></i> Clientes</h1>
-    <div class="bg-white shadow-sm rounded px-4 py-2 d-flex flex-column align-items-center" style="min-width:120px;">
-        <span class="text-secondary" style="font-size:1rem;">Clientes</span>
-        <span class="fw-bold" style="font-size:2rem; color:#1687f7;"><?php echo $qtdClientes; ?></span>
-    </div>
 </div>
         <div class="row mb-4">
             <div class="col-md-8">

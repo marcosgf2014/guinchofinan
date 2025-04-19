@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <aside class="sidebar">
@@ -24,6 +26,77 @@
     <main class="main-content">
         <h1>Dashboard</h1>
         <div class="cards">
+<?php
+// Buscar receitas e despesas mensais a partir de 2024
+$dadosGrafico = [];
+$labelsGrafico = [];
+$entradasGrafico = [];
+$saidasGrafico = [];
+$sqlGrafico = "SELECT DATE_FORMAT(data, '%Y-%m') as mes, tipo, SUM(valor) as total FROM financeiro WHERE data >= '2024-01-01' GROUP BY mes, tipo ORDER BY mes ASC";
+$resG = $conn->query($sqlGrafico);
+if ($resG) {
+    while($row = $resG->fetch_assoc()) {
+        $mes = $row['mes'];
+        if (!isset($dadosGrafico[$mes])) {
+            $dadosGrafico[$mes] = ['entrada'=>0, 'saida'=>0];
+        }
+        $dadosGrafico[$mes][$row['tipo']] = (float)$row['total'];
+    }
+}
+foreach ($dadosGrafico as $mes => $valores) {
+    $labelsGrafico[] = $mes;
+    $entradasGrafico[] = $valores['entrada'];
+    $saidasGrafico[] = $valores['saida'];
+}
+?>
+<div class="dashboard-graph" style="margin:24px 0 32px 0; background:#fff; border-radius:12px; box-shadow:0 2px 8px #0001; padding:24px;">
+    <h2 style="font-size:1.2rem; font-weight:600; margin-bottom:16px;">Gráfico Financeiro (Entradas e Saídas)</h2>
+    <canvas id="graficoFinanceiro" height="60"></canvas>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('graficoFinanceiro').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labelsGrafico); ?>,
+            datasets: [
+                {
+                    label: 'Entradas',
+                    backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 1,
+                    data: <?php echo json_encode($entradasGrafico); ?>,
+                },
+                {
+                    label: 'Saídas',
+                    backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                    borderColor: 'rgba(220, 53, 69, 1)',
+                    borderWidth: 1,
+                    data: <?php echo json_encode($saidasGrafico); ?>,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
             <div class="card">
                 <div class="card-icon"><i class="fas fa-users"></i></div>
                 <div class="card-info">
