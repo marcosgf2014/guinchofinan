@@ -132,7 +132,7 @@ if ($resUltimosLanc && $resUltimosLanc->num_rows > 0) {
         <ul style="margin-bottom:0; padding-left:1.2em;">
             <?php foreach ($ultimosLancamentos as $lanc): ?>
                 <li>
-                    <strong><?php echo htmlspecialchars(date('d/m/Y', strtotime($lanc['data']))); ?></strong> -
+                    <span><?php echo htmlspecialchars(date('d/m/Y', strtotime($lanc['data']))); ?></span> -
                     <?php echo htmlspecialchars($lanc['descricao']); ?>
                     (<?php echo $lanc['tipo'] == 'entrada' ? '+' : '-'; ?>R$ <?php echo number_format($lanc['valor'], 2, ',', '.'); ?>)
                 </li>

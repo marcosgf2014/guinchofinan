@@ -242,12 +242,12 @@ if (isset($_GET['id'])) {
                 <div class="tab-pane fade" id="fotos" role="tabpanel">
     <div class="mb-3">
         <label class="form-label">Fotos do Veículo</label>
-        <div id="uploadArea" style="border:2px dashed #b5b5b5; border-radius:12px; padding:32px; text-align:center; background:#fafbfc; margin-bottom:20px;">
+        <div id="uploadArea" style="border:2px dashed #b5b5b5; border-radius:12px; padding:2px; min-height:24px; text-align:center; background:#fafbfc; margin-bottom:20px;">
             <div style="font-size:2rem; color:#bbb;"><i class="fas fa-camera"></i></div>
             <div style="font-weight:bold; font-size:1.1rem; margin-top:8px;">Adicionar Fotos do Veículo</div>
             <div style="color:#888; font-size:0.95rem; margin-bottom:16px;">Faça upload de imagens para documentar a condição do veículo</div>
             <input type="file" id="inputFotos" name="fotos[]" accept="image/*" multiple style="display:none;">
-            <button type="button" class="btn btn-primary" id="btnEscolherFotos"><i class="fas fa-upload"></i> Escolher Imagens</button>
+            <button type="button" class="btn btn-primary" id="btnEscolherFotos" style="width:170px; height:50px;"><i class="fas fa-upload"></i> Escolher Imagens</button>
             <div id="uploadFeedback" class="mt-2"></div>
         </div>
         <div id="galeriaFotos" class="row g-3"></div>
