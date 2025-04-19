@@ -127,14 +127,26 @@ function campo($label, $valor, $icon) {
             <div class="mb-2"><i class="fas fa-tools text-danger me-2"></i>Sim</div>
         <?php endif; ?>
 
-        <?php if (!empty($row['fotos'])): ?>
-            <div class="relatorio-section-title"><i class="fas fa-camera"></i> Fotos do Veículo</div>
-            <div class="row mb-2">
-                <?php foreach (explode(',', $row['fotos']) as $foto): if (trim($foto)): ?>
-                <div class="col-4 col-md-3 mb-2"><img src="uploads/<?= htmlspecialchars(trim($foto)) ?>" alt="Foto" class="img-fluid rounded shadow"></div>
-                <?php endif; endforeach; ?>
-            </div>
-        <?php endif; ?>
+        <?php
+// Buscar fotos na tabela checklist_fotos
+$fotos = [];
+$stmt = $conn->prepare('SELECT caminho FROM checklist_fotos WHERE checklist_id = ?');
+$stmt->bind_param('i', $id);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($fotoRow = $result->fetch_assoc()) {
+    $fotos[] = $fotoRow['caminho'];
+}
+$stmt->close();
+?>
+<?php if (!empty($fotos)): ?>
+    <div class="relatorio-section-title"><i class="fas fa-camera"></i> Fotos do Veículo</div>
+    <div class="row mb-2">
+        <?php foreach ($fotos as $foto): ?>
+        <div class="col-4 col-md-3 mb-2"><img src="../uploads/<?= htmlspecialchars($foto) ?>" alt="Foto" class="img-fluid rounded shadow"></div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
         <?php if (!empty($row['assinatura_cliente']) || !empty($row['assinatura_responsavel'])): ?>
             <div class="relatorio-section-title"><i class="fas fa-signature"></i> Assinaturas</div>
             <div class="row mb-2">
