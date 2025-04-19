@@ -27,7 +27,7 @@
 <?php
 require_once '../db.php';
 $resumo = ["entradas"=>0, "saidas"=>0, "saldo"=>0];
-$sqlResumo = "SELECT tipo, SUM(valor) as total FROM financeiro GROUP BY tipo";
+$sqlResumo = "SELECT tipo, SUM(valor) as total FROM financeiro WHERE data >= '2024-01-01' GROUP BY tipo";
 $resR = $conn->query($sqlResumo);
 if ($resR) {
     while($r = $resR->fetch_assoc()) {

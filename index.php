@@ -28,36 +28,119 @@
                 <div class="card-icon"><i class="fas fa-users"></i></div>
                 <div class="card-info">
                     <span class="card-title">Clientes</span>
-                    <span class="card-value" id="clientes-count">0</span>
+                    <?php
+require_once 'db.php';
+$qtdClientes = 0;
+$ultimosClientes = [];
+$resQtd = $conn->query("SELECT COUNT(*) as total FROM clientes");
+if ($resQtd && $rowQtd = $resQtd->fetch_assoc()) {
+    $qtdClientes = (int)$rowQtd['total'];
+}
+$resUltimos = $conn->query("SELECT nome FROM clientes ORDER BY id DESC LIMIT 5");
+if ($resUltimos && $resUltimos->num_rows > 0) {
+    while ($row = $resUltimos->fetch_assoc()) {
+        $ultimosClientes[] = $row['nome'];
+    }
+}
+?>
+<span class="card-value" id="clientes-count"><?php echo $qtdClientes; ?></span>
                 </div>
             </div>
             <div class="card">
                 <div class="card-icon"><i class="fas fa-car"></i></div>
                 <div class="card-info">
                     <span class="card-title">Veículos</span>
-                    <span class="card-value" id="veiculos-count">0</span>
+                    <?php
+$qtdVeiculos = 0;
+$ultimosVeiculos = [];
+$resQtdV = $conn->query("SELECT COUNT(*) as total FROM veiculos");
+if ($resQtdV && $rowQtdV = $resQtdV->fetch_assoc()) {
+    $qtdVeiculos = (int)$rowQtdV['total'];
+}
+$resUltimosV = $conn->query("SELECT placa, modelo FROM veiculos ORDER BY id DESC LIMIT 5");
+if ($resUltimosV && $resUltimosV->num_rows > 0) {
+    while ($row = $resUltimosV->fetch_assoc()) {
+        $ultimosVeiculos[] = $row;
+    }
+}
+?>
+<span class="card-value" id="veiculos-count"><?php echo $qtdVeiculos; ?></span>
                 </div>
             </div>
             <div class="card">
                 <div class="card-icon"><i class="fas fa-coins"></i></div>
                 <div class="card-info">
                     <span class="card-title">Saldo</span>
-                    <span class="card-value" id="saldo">R$ 0,00</span>
+                    <?php
+$saldo = 0.00;
+$ultimosLancamentos = [];
+$resResumo = $conn->query("SELECT tipo, SUM(valor) as total FROM financeiro WHERE data >= '2024-01-01' GROUP BY tipo");
+$entradas = 0.00;
+$saidas = 0.00;
+if ($resResumo) {
+    while($r = $resResumo->fetch_assoc()) {
+        if ($r['tipo'] == 'entrada') $entradas += $r['total'];
+        if ($r['tipo'] == 'saida') $saidas += $r['total'];
+    }
+}
+$saldo = $entradas - $saidas;
+$resUltimosLanc = $conn->query("SELECT data, descricao, valor, tipo FROM financeiro WHERE data >= '2024-01-01' ORDER BY data DESC, id DESC LIMIT 5");
+if ($resUltimosLanc && $resUltimosLanc->num_rows > 0) {
+    while ($row = $resUltimosLanc->fetch_assoc()) {
+        $ultimosLancamentos[] = $row;
+    }
+}
+?>
+<span class="card-value" id="saldo">R$ <?php echo number_format($saldo, 2, ',', '.'); ?></span>
                 </div>
             </div>
         </div>
         <div class="dashboard-sections">
             <section>
                 <h2>Últimos Clientes</h2>
-                <div id="ultimos-clientes">Nenhum cliente cadastrado.</div>
+                <div id="ultimos-clientes">
+    <?php if (count($ultimosClientes) > 0): ?>
+        <ul style="margin-bottom:0; padding-left:1.2em;">
+            <?php foreach ($ultimosClientes as $nome): ?>
+                <li><?php echo htmlspecialchars($nome); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        Nenhum cliente cadastrado.
+    <?php endif; ?>
+</div>
             </section>
             <section>
                 <h2>Últimos Veículos</h2>
-                <div id="ultimos-veiculos">Nenhum veículo cadastrado.</div>
+                <div id="ultimos-veiculos">
+    <?php if (count($ultimosVeiculos) > 0): ?>
+        <ul style="margin-bottom:0; padding-left:1.2em;">
+            <?php foreach ($ultimosVeiculos as $veiculo): ?>
+                <li><?php echo htmlspecialchars($veiculo['placa']) . ' - ' . htmlspecialchars($veiculo['modelo']); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        Nenhum veículo cadastrado.
+    <?php endif; ?>
+</div>
             </section>
             <section>
                 <h2>Movimentação Financeira</h2>
-                <div id="ultimos-financeiro">Nenhum lançamento cadastrado.</div>
+                <div id="ultimos-financeiro">
+    <?php if (count($ultimosLancamentos) > 0): ?>
+        <ul style="margin-bottom:0; padding-left:1.2em;">
+            <?php foreach ($ultimosLancamentos as $lanc): ?>
+                <li>
+                    <strong><?php echo htmlspecialchars(date('d/m/Y', strtotime($lanc['data']))); ?></strong> -
+                    <?php echo htmlspecialchars($lanc['descricao']); ?>
+                    (<?php echo $lanc['tipo'] == 'entrada' ? '+' : '-'; ?>R$ <?php echo number_format($lanc['valor'], 2, ',', '.'); ?>)
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        Nenhum lançamento cadastrado.
+    <?php endif; ?>
+</div>
             </section>
         </div>
     </main>
