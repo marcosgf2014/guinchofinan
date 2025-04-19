@@ -58,7 +58,7 @@ function campo($label, $valor, $icon) {
     <main class="main-content container py-4">
     <div class="relatorio-card">
         <div class="relatorio-header">
-            <i class="fas fa-file-alt"></i>
+            <i class="fas fa-file-alt" style="color:#2196f3;"></i>
             <span class="relatorio-title">Relatório do Checklist</span>
             <span class="ms-auto text-muted"><i class="fas fa-calendar-alt"></i> <?= date('d/m/Y H:i', strtotime($row['entrada'])) ?></span>
         </div>
@@ -85,30 +85,30 @@ function campo($label, $valor, $icon) {
             </div>
             <div class="col-md-6">
                 <div class="fw-bold mb-1"><i class="fas fa-toolbox"></i> Acessórios</div>
-                <?php $acessorios = ['calotas','retrovisores','palhetas','triangulo','macaco_chave_roda'];
+                <?php $acessorios = ['calotas','retrovisores','palhetas','triangulo','macaco'];
                 foreach ($acessorios as $a) {
                     if (!empty($row[$a])) {
-                        echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#217a36;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst(str_replace('_',' ',$a)).'</span>';
+                        echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#32a852;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst(str_replace('_',' ',$a)).'</span>';
                     } else {
-                        echo '<span class="badge text-danger me-1 mb-1" style="background:#ffe5e9;border:1px solid #222;font-size:1rem;"><i class="fas fa-times"></i> '.ucfirst(str_replace('_',' ',$a)).'</span>';
+                        echo '<span class="badge text-danger me-1 mb-1" style="background:#ffe5e9;border:1px solid #222;font-size:1rem;color:#e74c3c;"><i class="fas fa-times"></i> '.ucfirst(str_replace('_',' ',$a)).'</span>';
                     }
                 } ?>
                 <div class="fw-bold mt-2 mb-1"><i class="fas fa-chair"></i> Interior</div>
                 <?php $interior = ['bancos','painel','consoles','forracao','tapetes'];
                 foreach ($interior as $i) {
                     if (!empty($row[$i])) {
-                        echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#217a36;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst($i).'</span>';
+                        echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#32a852;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst($i).'</span>';
                     } else {
-                        echo '<span class="badge text-danger me-1 mb-1" style="background:#ffe5e9;border:1px solid #222;font-size:1rem;"><i class="fas fa-times"></i> '.ucfirst($i).'</span>';
+                        echo '<span class="badge text-danger me-1 mb-1" style="background:#ffe5e9;border:1px solid #222;font-size:1rem;color:#e74c3c;"><i class="fas fa-times"></i> '.ucfirst($i).'</span>';
                     }
                 } ?>
                 <div class="fw-bold mt-2 mb-1"><i class="fas fa-car-battery"></i> Outros</div>
                 <?php $outros = ['bateria','chaves','documentos','som','caixa_selada'];
                 foreach ($outros as $o) {
                     if (!empty($row[$o])) {
-                        echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#217a36;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst(str_replace('_',' ',$o)).'</span>';
+                        echo '<span class="badge me-1 mb-1" style="background:#e8fae5;color:#32a852;border:1px solid #222;font-size:1rem;"><i class="fas fa-check"></i> '.ucfirst(str_replace('_',' ',$o)).'</span>';
                     } else {
-                        echo '<span class="badge text-danger me-1 mb-1" style="background:#ffe5e9;border:1px solid #222;font-size:1rem;"><i class="fas fa-times"></i> '.ucfirst(str_replace('_',' ',$o)).'</span>';
+                        echo '<span class="badge text-danger me-1 mb-1" style="background:#ffe5e9;border:1px solid #222;font-size:1rem;color:#e74c3c;"><i class="fas fa-times"></i> '.ucfirst(str_replace('_',' ',$o)).'</span>';
                     }
                 } ?>
             </div>

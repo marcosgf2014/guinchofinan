@@ -125,7 +125,7 @@ if (isset($_GET['id'])) {
                                 <select class="form-select" name="pneus_dianteiros">
     <?php $pneus_dianteiros_sel = $edit ? $checklist['pneus_dianteiros'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option value="Bons" <?= ($pneus_dianteiros_sel == 'Bons') ? 'selected' : '' ?>>Bons</option>
+                                    <option value="Bom" <?= ($pneus_dianteiros_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
                                     <option value="Novo" <?= ($pneus_dianteiros_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
                                     <option value="Ruim" <?= ($pneus_dianteiros_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
@@ -135,7 +135,7 @@ if (isset($_GET['id'])) {
                                 <select class="form-select" name="pneus_traseiros">
     <?php $pneus_traseiros_sel = $edit ? $checklist['pneus_traseiros'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option value="Bons" <?= ($pneus_traseiros_sel == 'Bons') ? 'selected' : '' ?>>Bons</option>
+                                    <option value="Bom" <?= ($pneus_traseiros_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
                                     <option value="Novo" <?= ($pneus_traseiros_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
                                     <option value="Ruim" <?= ($pneus_traseiros_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
@@ -145,7 +145,7 @@ if (isset($_GET['id'])) {
                                 <select class="form-select" name="rodas_dianteiras">
     <?php $rodas_dianteiras_sel = $edit ? $checklist['rodas_dianteiras'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option value="Bons" <?= ($rodas_dianteiras_sel == 'Bons') ? 'selected' : '' ?>>Bons</option>
+                                    <option value="Bom" <?= ($rodas_dianteiras_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
                                     <option value="Novo" <?= ($rodas_dianteiras_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
                                     <option value="Ruim" <?= ($rodas_dianteiras_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
@@ -155,7 +155,7 @@ if (isset($_GET['id'])) {
                                 <select class="form-select" name="rodas_traseiras">
     <?php $rodas_traseiras_sel = $edit ? $checklist['rodas_traseiras'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option value="Bons" <?= ($rodas_traseiras_sel == 'Bons') ? 'selected' : '' ?>>Bons</option>
+                                    <option value="Bom" <?= ($rodas_traseiras_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
                                     <option value="Novo" <?= ($rodas_traseiras_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
                                     <option value="Ruim" <?= ($rodas_traseiras_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>

@@ -305,7 +305,7 @@ if ($res && $res->num_rows > 0):
     <td class="text-center">
         <a href="checklist_novo.php?id=<?= $row['id'] ?>" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
         <a href="excluir.php?id=<?= $row['id'] ?>" class="btn-acao btn-excluir" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este checklist?');"><i class="fas fa-trash"></i></a>
-<a href="checklist_relatorio.php?id=<?= $row['id'] ?>" class="btn-acao btn-relatorio ms-2" title="Gerar Relatório"><i class="fas fa-file-pdf"></i></a>
+<a href="checklist_relatorio.php?id=<?= $row['id'] ?>" class="btn-acao btn-relatorio ms-2" title="Gerar Relatório"><i class="fas fa-file-pdf" style="color:#32a852;"></i></a>
     </td>
 </tr>
 <?php endwhile;
