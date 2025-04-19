@@ -18,18 +18,33 @@
             <a href="../veiculos/index.php"><i class="fas fa-car"></i> Veículos</a>
             <a href="index.php" class="active"><i class="fas fa-clipboard-check"></i> Checklist</a>
             <a href="../financeiro/index.php"><i class="fas fa-coins"></i> Financeiro</a>
+            <a href="../relatorios/index.php"><i class="fas fa-chart-bar"></i> Relatórios</a>
+            
+            
         </nav>
     </aside>
     <main class="main-content container py-4">
+<<<<<<< HEAD
     <?php if(isset($_GET['msg'])): ?>
       <div class="alert alert-success mt-3">
         <?= htmlspecialchars($_GET['msg']) ?>
       </div>
     <?php endif; ?>
+=======
+        <?php if (isset($_GET['msg']) && $_GET['msg'] === 'checklist_salvo'): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top:10px;">
+                Checklist cadastrado com sucesso!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+>>>>>>> recuperar-checklist
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Checklist</h1>
-        <div class="row mb-4">
+        <div class="row mb-4 align-items-center">
             <div class="col-md-8">
-                <!-- Espaço para busca futura, se desejar -->
+                <form class="d-flex" method="get" action="index.php">
+                    <input class="form-control me-2" type="search" name="busca" placeholder="Buscar por veículo, placa, item, observação..." value="<?= isset($_GET['busca']) ? htmlspecialchars($_GET['busca']) : '' ?>">
+                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+                </form>
             </div>
             <div class="col-md-4 text-end">
                 <a href="checklist_novo.php" class="btn btn-success px-4">
@@ -116,11 +131,12 @@
                                                 <option>Novo</option>
                                                 <option>Ruim</option>
                                             </select>
-                                        </div>
+                                        </div>s
                                         <div class="mb-2">
                                             <label class="form-label">Rodas Dianteiras</label>
                                             <select class="form-select" name="rodas_dianteiras">
                                                 <option value="">Selecione</option>
+                                                <option>Bom</option>
                                                 <option>Novo</option>
                                                 <option>Usado</option>
                                             </select>
@@ -129,6 +145,7 @@
                                             <label class="form-label">Rodas Traseiras</label>
                                             <select class="form-select" name="rodas_traseiras">
                                                 <option value="">Selecione</option>
+                                                <option>Bom</option>
                                                 <option>Novo</option>
                                                 <option>Usado</option>
                                             </select>
@@ -242,14 +259,21 @@
                 <table class="table table-striped table-hover align-middle shadow-sm">
                     <thead class="table-dark">
                         <tr>
+<<<<<<< HEAD
                             <th>Nome</th>
                             <th>Veículo</th>
+=======
+                            <th>Cliente</th>
+                            <th>Veículo</th>
+                            <th>Placa</th>
+>>>>>>> recuperar-checklist
                             <th>Data</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
+<<<<<<< HEAD
                         include __DIR__ . '/../db.php';
                         $sql = "SELECT id, cliente, veiculo, data_entrada FROM checklist ORDER BY id DESC";
                         $result = $conn->query($sql);
@@ -268,6 +292,54 @@
                         else: ?>
                             <tr><td colspan="4" class="text-center">Nenhum checklist cadastrado.</td></tr>
                         <?php endif; ?>
+=======
+require_once '../db.php';
+$where = '';
+if (isset($_GET['busca']) && $_GET['busca'] !== '') {
+    $busca = $conn->real_escape_string($_GET['busca']);
+    $where = "WHERE " .
+        "cliente LIKE '%$busca%' OR " .
+        "veiculo LIKE '%$busca%' OR " .
+        "entrada LIKE '%$busca%' OR " .
+        "origem LIKE '%$busca%' OR " .
+        "destino LIKE '%$busca%' OR " .
+        "quilometragem LIKE '%$busca%' OR " .
+        "combustivel LIKE '%$busca%' OR " .
+        "pneus_dianteiros LIKE '%$busca%' OR " .
+        "pneus_traseiros LIKE '%$busca%' OR " .
+        "rodas_dianteiras LIKE '%$busca%' OR " .
+        "rodas_traseiras LIKE '%$busca%' OR " .
+        "observacoes LIKE '%$busca%' OR " .
+        "pertences LIKE '%$busca%'";
+}
+$sql = "SELECT id, cliente, veiculo, entrada FROM checklist ".$where." ORDER BY entrada DESC";
+$res = $conn->query($sql);
+if ($res && $res->num_rows > 0):
+    while ($row = $res->fetch_assoc()):
+        // Extrai placa do campo veiculo, se vier como "Modelo - Placa"
+        $modelo = $row['veiculo'];
+        $placa = '';
+        if (strpos($modelo, ' - ') !== false) {
+            [$modelo, $placa] = explode(' - ', $modelo, 2);
+        }
+?>
+<tr>
+    <td><?= htmlspecialchars($row['cliente']) ?></td>
+    <td><?= htmlspecialchars($modelo) ?></td>
+    <td><?= htmlspecialchars($placa) ?></td>
+    <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($row['entrada']))) ?></td>
+    <td class="text-center">
+        <a href="checklist_novo.php?id=<?= $row['id'] ?>" class="btn-acao btn-editar me-2" title="Editar"><i class="fas fa-edit"></i></a>
+        <a href="excluir.php?id=<?= $row['id'] ?>" class="btn-acao btn-excluir" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este checklist?');"><i class="fas fa-trash"></i></a>
+<a href="checklist_relatorio.php?id=<?= $row['id'] ?>" class="btn-acao btn-relatorio ms-2" title="Gerar Relatório"><i class="fas fa-file-pdf" style="color:#32a852;"></i></a>
+    </td>
+</tr>
+<?php endwhile;
+else:
+?>
+<tr><td colspan="5" class="text-center">Nenhum checklist cadastrado.</td></tr>
+<?php endif; ?>
+>>>>>>> recuperar-checklist
                     </tbody>
                 </table>
             </div>

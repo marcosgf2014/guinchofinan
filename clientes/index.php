@@ -18,6 +18,8 @@
             <a href="../veiculos/index.php"><i class="fas fa-car"></i> Veículos</a>
             <a href="../checklist/index.php"><i class="fas fa-clipboard-check"></i> Checklist</a>
             <a href="../financeiro/index.php"><i class="fas fa-coins"></i> Financeiro</a>
+            <a href="../relatorios/index.php"><i class="fas fa-chart-bar"></i> Relatórios</a>
+            
         </nav>
     </aside>
     <main class="main-content container py-4">
@@ -27,7 +29,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
             </div>
         <?php endif; ?>
-        <h1 class="mb-4"><i class="fas fa-users"></i> Clientes</h1>
+        <?php
+require_once '../db.php';
+$qtdClientes = 0;
+$resQtd = $conn->query("SELECT COUNT(*) as total FROM clientes");
+if ($resQtd && $rowQtd = $resQtd->fetch_assoc()) {
+    $qtdClientes = (int)$rowQtd['total'];
+}
+?>
+<div class="d-flex align-items-center mb-4">
+    <h1 class="mb-0 me-3"><i class="fas fa-users"></i> Clientes</h1>
+</div>
         <div class="row mb-4">
             <div class="col-md-8">
                 <form class="d-flex" method="get" action="index.php">

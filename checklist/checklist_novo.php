@@ -25,6 +25,19 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+<?php
+require_once '../db.php';
+$edit = false;
+$checklist = [];
+if (isset($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $res = $conn->query("SELECT * FROM checklist WHERE id = $id LIMIT 1");
+    if ($res && $res->num_rows) {
+        $checklist = $res->fetch_assoc();
+        $edit = true;
+    }
+}
+?>
     <aside class="sidebar">
         <div class="sidebar-title">Guincho</div>
         <nav>
@@ -36,11 +49,21 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
         </nav>
     </aside>
     <main class="main-content container py-4">
+<<<<<<< HEAD
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Novo Checklist</h1>
         <form class="row g-3 p-3" method="post" action="salvar_checklist.php" enctype="multipart/form-data">
+=======
+        <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> <?= $edit ? 'Editar Checklist' : 'Novo Checklist' ?></h1>
+        <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
+    <?php if ($edit): ?>
+        <input type="hidden" name="id" value="<?= htmlspecialchars($checklist['id']) ?>">
+    <?php endif; ?>
+>>>>>>> recuperar-checklist
             <div class="row mb-3 align-items-end">
+                <!-- Primeira linha: Cliente, Veículo, Data -->
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
+<<<<<<< HEAD
                     <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?php echo isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : ''; ?>">
                 </div>
                 <div class="col-md-5">
@@ -52,10 +75,18 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
                         <?php endif; ?>
                         <!-- Opções devem ser preenchidas dinamicamente -->
                     </select>
+=======
+                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?= $edit ? htmlspecialchars($checklist['cliente']) : (isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : '') ?>" required <?= $edit ? 'readonly' : '' ?> >
+                </div>
+                <div class="col-md-5">
+                    <label for="veiculo" class="form-label">Veículo</label>
+                    <input type="text" class="form-control" id="veiculo" name="veiculo" placeholder="Veículo" value="<?= $edit ? htmlspecialchars($checklist['veiculo']) : (isset($_GET['veiculo']) ? htmlspecialchars($_GET['veiculo']) : '') ?>" required <?= $edit ? 'readonly' : '' ?>>
+>>>>>>> recuperar-checklist
                 </div>
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
+<<<<<<< HEAD
                     <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>">
                 </div>
             </div>
@@ -67,6 +98,20 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
                 <div class="col-md-6">
                     <label for="destino" class="form-label">Destino</label>
                     <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?php echo isset($_GET['destino']) ? htmlspecialchars($_GET['destino']) : htmlspecialchars($destino_val); ?>">
+=======
+                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= date('Y-m-d\TH:i') ?>" required <?= $edit ? 'readonly' : '' ?>>
+                </div>
+            </div>
+            <!-- Segunda linha: Origem, Destino -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="origem" class="form-label">Origem</label>
+                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?= $edit ? htmlspecialchars($checklist['origem']) : '' ?>">
+                </div>
+                <div class="col-md-6">
+                    <label for="destino" class="form-label">Destino</label>
+                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?= $edit ? htmlspecialchars($checklist['destino']) : '' ?>">
+>>>>>>> recuperar-checklist
                 </div>
             </div>
             <!-- Nav tabs -->
@@ -90,31 +135,39 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="quilometragem" class="form-label">Quilometragem</label>
+<<<<<<< HEAD
                             <input type="number" class="form-control" id="quilometragem" name="quilometragem">
+=======
+                            <input type="number" class="form-control" id="quilometragem" name="quilometragem" value="<?= $edit ? htmlspecialchars($checklist['quilometragem']) : '' ?>">
+>>>>>>> recuperar-checklist
                         </div>
                         <div class="col-md-6">
                             <label for="combustivel" class="form-label">Nível de Combustível</label>
                             <select class="form-select" id="combustivel" name="combustivel">
+<<<<<<< HEAD
+=======
+    <?php $combustivel_sel = $edit ? $checklist['combustivel'] : ''; ?>
+>>>>>>> recuperar-checklist
                                 <option value="">Selecione</option>
-                                <option value="1/4">1/4</option>
-                                <option value="1/2">1/2</option>
-                                <option value="3/4">3/4</option>
-                                <option value="Cheio">Cheio</option>
-                                <option value="Reserva">Reserva</option>
+                                <option value="1/4" <?= ($combustivel_sel == '1/4') ? 'selected' : '' ?>>1/4</option>
+<option value="1/2" <?= ($combustivel_sel == '1/2') ? 'selected' : '' ?>>1/2</option>
+<option value="3/4" <?= ($combustivel_sel == '3/4') ? 'selected' : '' ?>>3/4</option>
+<option value="Cheio" <?= ($combustivel_sel == 'Cheio') ? 'selected' : '' ?>>Cheio</option>
+<option value="Reserva" <?= ($combustivel_sel == 'Reserva') ? 'selected' : '' ?>>Reserva</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="danos" name="danos">
+                        <input class="form-check-input" type="checkbox" id="danos" name="danos" <?= ($edit && $checklist['danos']) ? 'checked' : '' ?>>
                         <label class="form-check-label" for="danos">Veículo possui danos externos visíveis</label>
                     </div>
                     <div class="mb-3">
                         <label for="pertences" class="form-label">Pertences deixados no veículo</label>
-                        <textarea class="form-control" id="pertences" name="pertences" rows="2" placeholder="Liste os pertences deixados no veículo..."></textarea>
+                        <textarea class="form-control" id="pertences" name="pertences" rows="2" placeholder="Liste os pertences deixados no veículo..."><?= $edit ? htmlspecialchars($checklist['pertences']) : '' ?></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="observacoes" class="form-label">Observações Adicionais</label>
-                        <textarea class="form-control" id="observacoes" name="observacoes" rows="2" placeholder="Observações adicionais importantes..."></textarea>
+                        <textarea class="form-control" id="observacoes" name="observacoes" rows="2" placeholder="Observações adicionais importantes..."><?= $edit ? htmlspecialchars($checklist['observacoes']) : '' ?></textarea>
                     </div>
                 </div>
                 <!-- Aba Detalhes -->
@@ -125,106 +178,116 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
                             <div class="mb-2">
                                 <label class="form-label">Pneus Dianteiros</label>
                                 <select class="form-select" name="pneus_dianteiros">
+    <?php $pneus_dianteiros_sel = $edit ? $checklist['pneus_dianteiros'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option>Bons</option>
-                                    <option>Novo</option>
-                                    <option>Ruim</option>
+                                    <option value="Bom" <?= ($pneus_dianteiros_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
+                                    <option value="Novo" <?= ($pneus_dianteiros_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
+                                    <option value="Ruim" <?= ($pneus_dianteiros_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Pneus Traseiros</label>
                                 <select class="form-select" name="pneus_traseiros">
+    <?php $pneus_traseiros_sel = $edit ? $checklist['pneus_traseiros'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option>Bons</option>
-                                    <option>Novo</option>
-                                    <option>Ruim</option>
+                                    <option value="Bom" <?= ($pneus_traseiros_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
+                                    <option value="Novo" <?= ($pneus_traseiros_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
+                                    <option value="Ruim" <?= ($pneus_traseiros_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Rodas Dianteiras</label>
                                 <select class="form-select" name="rodas_dianteiras">
+    <?php $rodas_dianteiras_sel = $edit ? $checklist['rodas_dianteiras'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option>Novo</option>
-                                    <option>Usado</option>
+                                    <option value="Bom" <?= ($rodas_dianteiras_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
+                                    <option value="Novo" <?= ($rodas_dianteiras_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
+                                    <option value="Ruim" <?= ($rodas_dianteiras_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Rodas Traseiras</label>
                                 <select class="form-select" name="rodas_traseiras">
+    <?php $rodas_traseiras_sel = $edit ? $checklist['rodas_traseiras'] : ''; ?>
                                     <option value="">Selecione</option>
-                                    <option>Novo</option>
-                                    <option>Usado</option>
+                                    <option value="Bom" <?= ($rodas_traseiras_sel == 'Bom') ? 'selected' : '' ?>>Bom</option>
+                                    <option value="Novo" <?= ($rodas_traseiras_sel == 'Novo') ? 'selected' : '' ?>>Novo</option>
+                                    <option value="Ruim" <?= ($rodas_traseiras_sel == 'Ruim') ? 'selected' : '' ?>>Ruim</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <h6>Acessórios</h6>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="calotas" name="calotas">
+                                <input class="form-check-input" type="checkbox" id="calotas" name="calotas" <?= ($edit && $checklist['calotas']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="calotas">Calotas</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="retrovisores" name="retrovisores">
+                                <input class="form-check-input" type="checkbox" id="retrovisores" name="retrovisores" <?= ($edit && $checklist['retrovisores']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="retrovisores">Retrovisores</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="palhetas" name="palhetas">
+                                <input class="form-check-input" type="checkbox" id="palhetas" name="palhetas" <?= ($edit && $checklist['palhetas']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="palhetas">Palhetas</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="triangulo" name="triangulo">
+                                <input class="form-check-input" type="checkbox" id="triangulo" name="triangulo" <?= ($edit && $checklist['triangulo']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="triangulo">Triângulo</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="macaco" name="macaco">
-                                <label class="form-check-label" for="macaco">Macaco / Chave Roda</label>
-                            </div>
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="estepe" name="estepe">
-                                <label class="form-check-label" for="estepe">Estepe</label>
-                            </div>
+    <input class="form-check-input" type="checkbox" id="macaco" name="macaco" <?= ($edit && $checklist['macaco']) ? 'checked' : '' ?>>
+    <label class="form-check-label" for="macaco">Macaco</label>
+</div>
+<div class="form-check form-switch mb-1">
+    <input class="form-check-input" type="checkbox" id="chave_roda" name="chave_roda" <?= ($edit && isset($checklist['chave_roda']) && $checklist['chave_roda']) ? 'checked' : '' ?> >
+    <label class="form-check-label" for="chave_roda">Chave do Roda</label>
+</div>
+<div class="form-check form-switch mb-1">
+    <input class="form-check-input" type="checkbox" id="estepe" name="estepe" <?= ($edit && $checklist['estepe']) ? 'checked' : '' ?>>
+    <label class="form-check-label" for="estepe">Estepe</label>
+</div>
                         </div>
                         <div class="col-md-4">
                             <h6>Interior</h6>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="bancos" name="bancos">
+                                <input class="form-check-input" type="checkbox" id="bancos" name="bancos" <?= ($edit && $checklist['bancos']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="bancos">Bancos</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="painel" name="painel">
+                                <input class="form-check-input" type="checkbox" id="painel" name="painel" <?= ($edit && $checklist['painel']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="painel">Painel</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="consoles" name="consoles">
+                                <input class="form-check-input" type="checkbox" id="consoles" name="consoles" <?= ($edit && $checklist['consoles']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="consoles">Consoles</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="forracao" name="forracao">
+                                <input class="form-check-input" type="checkbox" id="forracao" name="forracao" <?= ($edit && $checklist['forracao']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="forracao">Forração</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="tapetes" name="tapetes">
+                                <input class="form-check-input" type="checkbox" id="tapetes" name="tapetes" <?= ($edit && $checklist['tapetes']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="tapetes">Tapetes</label>
                             </div>
                             <h6 class="mt-3">Outros</h6>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="bateria" name="bateria">
+                                <input class="form-check-input" type="checkbox" id="bateria" name="bateria" <?= ($edit && $checklist['bateria']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="bateria">Bateria</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="chaves" name="chaves">
+                                <input class="form-check-input" type="checkbox" id="chaves" name="chaves" <?= ($edit && $checklist['chaves']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="chaves">Chaves</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="documentos" name="documentos">
+                                <input class="form-check-input" type="checkbox" id="documentos" name="documentos" <?= ($edit && $checklist['documentos']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="documentos">Documentos</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="som" name="som">
+                                <input class="form-check-input" type="checkbox" id="som" name="som" <?= ($edit && $checklist['som']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="som">Som</label>
                             </div>
                             <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" id="caixa_selada" name="caixa_selada">
+                                <input class="form-check-input" type="checkbox" id="caixa_selada" name="caixa_selada" <?= ($edit && $checklist['caixa_selada']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="caixa_selada">Caixa Selada</label>
                             </div>
                         </div>
@@ -258,5 +321,6 @@ if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
         </form>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="checklist_novo.js"></script>
 </body>
 </html>
