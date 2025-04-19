@@ -1,18 +1,3 @@
-<?php
-require_once '../db.php';
-$origem_val = '';
-$destino_val = '';
-if (isset($_GET['veiculo']) && !empty($_GET['veiculo'])) {
-    $veiculo = $conn->real_escape_string($_GET['veiculo']);
-    $sql = "SELECT origem, destino FROM veiculos WHERE CONCAT(modelo, ' - ', placa) = '$veiculo' LIMIT 1";
-    $res = $conn->query($sql);
-    if ($res && $res->num_rows > 0) {
-        $row = $res->fetch_assoc();
-        $origem_val = $row['origem'];
-        $destino_val = $row['destino'];
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -49,56 +34,24 @@ if (isset($_GET['id'])) {
         </nav>
     </aside>
     <main class="main-content container py-4">
-<<<<<<< HEAD
-        <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> Novo Checklist</h1>
-        <form class="row g-3 p-3" method="post" action="salvar_checklist.php" enctype="multipart/form-data">
-=======
         <h1 class="mb-4"><i class="fas fa-clipboard-check"></i> <?= $edit ? 'Editar Checklist' : 'Novo Checklist' ?></h1>
         <form class="row g-3 p-3" method="post" action="salvar.php" enctype="multipart/form-data">
     <?php if ($edit): ?>
         <input type="hidden" name="id" value="<?= htmlspecialchars($checklist['id']) ?>">
     <?php endif; ?>
->>>>>>> recuperar-checklist
             <div class="row mb-3 align-items-end">
                 <!-- Primeira linha: Cliente, Veículo, Data -->
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
-<<<<<<< HEAD
-                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?php echo isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : ''; ?>">
-                </div>
-                <div class="col-md-5">
-                    <label for="veiculo" class="form-label">Veículo</label>
-                    <select class="form-select" id="veiculo" name="veiculo">
-                        <option value="">Selecione...</option>
-                        <?php if (isset($_GET['veiculo'])): ?>
-                            <option value="<?php echo htmlspecialchars($_GET['veiculo']); ?>" selected><?php echo htmlspecialchars($_GET['veiculo']); ?></option>
-                        <?php endif; ?>
-                        <!-- Opções devem ser preenchidas dinamicamente -->
-                    </select>
-=======
                     <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?= $edit ? htmlspecialchars($checklist['cliente']) : (isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : '') ?>" required <?= $edit ? 'readonly' : '' ?> >
                 </div>
                 <div class="col-md-5">
                     <label for="veiculo" class="form-label">Veículo</label>
                     <input type="text" class="form-control" id="veiculo" name="veiculo" placeholder="Veículo" value="<?= $edit ? htmlspecialchars($checklist['veiculo']) : (isset($_GET['veiculo']) ? htmlspecialchars($_GET['veiculo']) : '') ?>" required <?= $edit ? 'readonly' : '' ?>>
->>>>>>> recuperar-checklist
                 </div>
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>
                     <?php date_default_timezone_set('America/Sao_Paulo'); ?>
-<<<<<<< HEAD
-                    <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?php echo date('Y-m-d\TH:i'); ?>">
-                </div>
-            </div>
-            <div class="row mb-3 align-items-end">
-                <div class="col-md-6">
-                    <label for="origem" class="form-label">Origem</label>
-                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?php echo isset($_GET['origem']) ? htmlspecialchars($_GET['origem']) : htmlspecialchars($origem_val); ?>">
-                </div>
-                <div class="col-md-6">
-                    <label for="destino" class="form-label">Destino</label>
-                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?php echo isset($_GET['destino']) ? htmlspecialchars($_GET['destino']) : htmlspecialchars($destino_val); ?>">
-=======
                     <input type="datetime-local" class="form-control" id="entrada" name="entrada" value="<?= date('Y-m-d\TH:i') ?>" required <?= $edit ? 'readonly' : '' ?>>
                 </div>
             </div>
@@ -111,7 +64,6 @@ if (isset($_GET['id'])) {
                 <div class="col-md-6">
                     <label for="destino" class="form-label">Destino</label>
                     <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?= $edit ? htmlspecialchars($checklist['destino']) : '' ?>">
->>>>>>> recuperar-checklist
                 </div>
             </div>
             <!-- Nav tabs -->
@@ -135,19 +87,12 @@ if (isset($_GET['id'])) {
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="quilometragem" class="form-label">Quilometragem</label>
-<<<<<<< HEAD
-                            <input type="number" class="form-control" id="quilometragem" name="quilometragem">
-=======
                             <input type="number" class="form-control" id="quilometragem" name="quilometragem" value="<?= $edit ? htmlspecialchars($checklist['quilometragem']) : '' ?>">
->>>>>>> recuperar-checklist
                         </div>
                         <div class="col-md-6">
                             <label for="combustivel" class="form-label">Nível de Combustível</label>
                             <select class="form-select" id="combustivel" name="combustivel">
-<<<<<<< HEAD
-=======
     <?php $combustivel_sel = $edit ? $checklist['combustivel'] : ''; ?>
->>>>>>> recuperar-checklist
                                 <option value="">Selecione</option>
                                 <option value="1/4" <?= ($combustivel_sel == '1/4') ? 'selected' : '' ?>>1/4</option>
 <option value="1/2" <?= ($combustivel_sel == '1/2') ? 'selected' : '' ?>>1/2</option>

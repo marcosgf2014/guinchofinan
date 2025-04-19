@@ -8,8 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <aside class="sidebar">
@@ -40,11 +38,6 @@ if ($resR) {
 $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 ?>
 <div id="campos-resumo" class="row mb-4" style="display: none;">
-<!-- Gráfico de Receitas e Despesas -->
-<?php
-?>
-
-
     <div class="col-md-4">
         <div class="card text-bg-success mb-3"><div class="card-body"><h5 class="card-title mb-0 text-center" style="color:#111; font-weight:bold; font-size:2rem; letter-spacing:1px;">Entradas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['entradas'],2,',','.') ?></p></div></div>
     </div>
