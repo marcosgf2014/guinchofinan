@@ -299,7 +299,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
 <script>
 function exportTableToPDF(btn) {
-    var table = btn.nextElementSibling.querySelector('table');
+    // Procura a próxima .table-responsive após o botão
+    var container = btn.parentNode.parentNode.querySelector('.table-responsive');
+    if (!container) {
+        alert('Tabela não encontrada!');
+        return;
+    }
+    var table = container.querySelector('table');
+    if (!table) {
+        alert('Tabela não encontrada!');
+        return;
+    }
     var doc = new jspdf.jsPDF('l', 'pt', 'a4');
     doc.autoTable({
         html: table,

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $obs           = $conn->real_escape_string($_POST['obs'] ?? '');
 
     // Validação de campos obrigatórios
-    if ($cliente_id && $tipo_veiculo && $placa && $status && $valor_servico && $data_entrada && $hora_entrada) {
+    if ($cliente_id && $tipo_veiculo && $placa && $valor_servico && $data_entrada && $hora_entrada) {
         if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             // Atualizar veículo existente
             $id = (int)$_GET['id'];
