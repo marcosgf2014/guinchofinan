@@ -37,7 +37,7 @@ if ($resR) {
 }
 $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 ?>
-<div class="row mb-4">
+<div id="campos-resumo" class="row mb-4" style="display: none;">
     <div class="col-md-4">
         <div class="card text-bg-success mb-3"><div class="card-body"><h5 class="card-title mb-0 text-center" style="color:#111; font-weight:bold; font-size:2rem; letter-spacing:1px;">Entradas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['entradas'],2,',','.') ?></p></div></div>
     </div>
@@ -49,7 +49,10 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
     </div>
 </div>
 
-        <h1 class="mb-4"><i class="fas fa-coins"></i> Financeiro</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0"><i class="fas fa-coins"></i> Financeiro</h1>
+    <button id="btn-visualizar" class="btn btn-outline-primary" type="button" onclick="mostrarCamposResumo()">Visualizar Resumo</button>
+</div>
         
         <!-- Modal Cadastro Financeiro -->
         <div class="modal fade" id="modalCadastroFinanceiro" tabindex="-1" aria-labelledby="modalCadastroFinanceiroLabel" aria-hidden="true">
@@ -308,6 +311,19 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
         }
     });
+</script>
+<script>
+function mostrarCamposResumo() {
+    var campos = document.getElementById('campos-resumo');
+    var btn = document.getElementById('btn-visualizar');
+    if (campos.style.display === "none") {
+        campos.style.display = "flex";
+        btn.textContent = "Ocultar Resumo";
+    } else {
+        campos.style.display = "none";
+        btn.textContent = "Visualizar Resumo";
+    }
+}
 </script>
 <style>
 .is-invalid { border-color: #dc3545 !important; }
