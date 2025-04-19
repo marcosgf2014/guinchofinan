@@ -24,6 +24,7 @@
     <main class="main-content">
         <h1>Dashboard</h1>
         <div class="cards">
+
             <div class="card">
                 <div class="card-icon"><i class="fas fa-users"></i></div>
                 <div class="card-info">
