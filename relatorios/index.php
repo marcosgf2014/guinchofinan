@@ -52,10 +52,10 @@
             $res = $conn->query($sql);
             if ($res && $res->num_rows > 0) {
                 echo '<div class="mb-2 d-flex gap-2">'
-    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
-
-    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
     .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="exportTableToCSV(this)"><i class="fas fa-file-csv"></i> Salvar CSV</button>'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
 .'</div>';
 echo '<div class="table-responsive">';
                 echo '<table class="table table-striped table-hover align-middle shadow-sm">';
@@ -120,10 +120,10 @@ echo '<div class="table-responsive">';
             $res = $conn->query($sql);
             if ($res && $res->num_rows > 0) {
                 echo '<div class="mb-2 d-flex gap-2">'
-    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
-
-    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
     .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="exportTableToCSV(this)"><i class="fas fa-file-csv"></i> Salvar CSV</button>'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
 .'</div>';
 echo '<div class="table-responsive">';
                 echo '<table class="table table-striped table-hover align-middle shadow-sm">';
@@ -182,10 +182,10 @@ echo '<div class="table-responsive">';
         $res = $conn->query($sql);
         if ($res && $res->num_rows > 0) {
             echo '<div class="mb-2 d-flex gap-2">'
-    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
-
-    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
     .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="exportTableToCSV(this)"><i class="fas fa-file-csv"></i> Salvar CSV</button>'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
 .'</div>';
 echo '<div class="table-responsive">';
             echo '<table class="table table-striped table-hover align-middle shadow-sm">';
@@ -298,7 +298,26 @@ function exportTableToTXT(btn) {
     link.href = window.URL.createObjectURL(txtFile);
     link.click();
 }
+function exportTableToCSV(btn) {
+    var table = btn.parentNode.nextElementSibling.querySelector('table');
+    var rows = table.querySelectorAll('tr');
+    let csv = '';
+    for (let row of rows) {
+        let cols = row.querySelectorAll('th, td');
+        let rowData = [];
+        for (let col of cols) {
+            // Aspas duplas para proteger campos com ;
+            rowData.push('"' + col.innerText.replace(/"/g, '""') + '"');
+        }
+        csv += rowData.join(';') + '\n';
+    }
+    let csvFile = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    let link = document.createElement('a');
+    link.download = 'relatorio.csv';
+    link.href = window.URL.createObjectURL(csvFile);
+    link.click();
+}
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
