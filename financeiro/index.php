@@ -18,6 +18,9 @@
             <a href="../veiculos/index.php"><i class="fas fa-car"></i> Veículos</a>
             <a href="../checklist/index.php"><i class="fas fa-clipboard-check"></i> Checklist</a>
             <a href="index.php" class="active"><i class="fas fa-coins"></i> Financeiro</a>
+            <a href="../relatorios/index.php"><i class="fas fa-chart-bar"></i> Relatórios</a>
+            
+            
         </nav>
     </aside>
     <main class="main-content container py-4">
