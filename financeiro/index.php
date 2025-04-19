@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <aside class="sidebar">
@@ -38,6 +40,82 @@ if ($resR) {
 $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 ?>
 <div id="campos-resumo" class="row mb-4" style="display: none;">
+<!-- Gráfico de Receitas e Despesas -->
+<?php
+// Buscar receitas e despesas mensais a partir de 2024
+$dadosGrafico = [];
+$labelsGrafico = [];
+$entradasGrafico = [];
+$saidasGrafico = [];
+$sqlGrafico = "SELECT DATE_FORMAT(data, '%Y-%m') as mes, tipo, SUM(valor) as total FROM financeiro WHERE data >= '2024-01-01' GROUP BY mes, tipo ORDER BY mes ASC";
+$resG = $conn->query($sqlGrafico);
+if ($resG) {
+    while($row = $resG->fetch_assoc()) {
+        $mes = $row['mes'];
+        if (!isset($dadosGrafico[$mes])) {
+            $dadosGrafico[$mes] = ['entrada'=>0, 'saida'=>0];
+        }
+        $dadosGrafico[$mes][$row['tipo']] = (float)$row['total'];
+    }
+}
+foreach ($dadosGrafico as $mes => $valores) {
+    $labelsGrafico[] = $mes;
+    $entradasGrafico[] = $valores['entrada'];
+    $saidasGrafico[] = $valores['saida'];
+}
+?>
+<div class="col-12 mb-4">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Gráfico de Movimentação Financeira</h5>
+            <canvas id="graficoFinanceiro" height="80"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('graficoFinanceiro').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labelsGrafico); ?>,
+            datasets: [
+                {
+                    label: 'Receitas',
+                    backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 1,
+                    data: <?php echo json_encode($entradasGrafico); ?>,
+                },
+                {
+                    label: 'Despesas',
+                    backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                    borderColor: 'rgba(220, 53, 69, 1)',
+                    borderWidth: 1,
+                    data: <?php echo json_encode($saidasGrafico); ?>,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
     <div class="col-md-4">
         <div class="card text-bg-success mb-3"><div class="card-body"><h5 class="card-title mb-0 text-center" style="color:#111; font-weight:bold; font-size:2rem; letter-spacing:1px;">Entradas</h5><p class="card-text fs-4 mb-0">R$ <?= number_format($resumo['entradas'],2,',','.') ?></p></div></div>
     </div>
