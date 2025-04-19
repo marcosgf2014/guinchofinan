@@ -42,7 +42,7 @@
             <button type="submit" class="btn btn-primary w-100">Gerar</button>
         </div>
     </form>
-    <div id="relatorioPeriodo" class="mt-3" style="display:none;">
+    <div id="relatorioPeriodo" class="mt-3"<?php if(isset($_GET['periodo_inicio']) && isset($_GET['periodo_fim']) && $_GET['periodo_inicio'] && $_GET['periodo_fim']){echo '';}else{echo ' style="display:none;"';} ?>>
         <?php
         if (isset($_GET['periodo_inicio']) && isset($_GET['periodo_fim']) && $_GET['periodo_inicio'] && $_GET['periodo_fim']) {
             require_once '../db.php';
@@ -58,7 +58,7 @@
                 echo '</tr></thead><tbody>';
                 while ($row = $res->fetch_assoc()) {
                     echo '<tr>';
-                    echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Saída') . '</td>';
+                    echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Despesas') . '</td>';
                     echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
                     echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
                     echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
@@ -105,7 +105,7 @@
             <button type="submit" class="btn btn-primary w-100">Gerar</button>
         </div>
     </form>
-    <div id="relatorioCategoria" class="mt-3" style="display:none;">
+    <div id="relatorioCategoria" class="mt-3"<?php if(isset($_GET['categoria_filtro']) && $_GET['categoria_filtro']){echo '';}else{echo ' style="display:none;"';} ?>>
         <?php
         if (isset($_GET['categoria_filtro']) && $_GET['categoria_filtro']) {
             require_once '../db.php';
@@ -120,7 +120,7 @@
                 echo '</tr></thead><tbody>';
                 while ($row = $res->fetch_assoc()) {
                     echo '<tr>';
-                    echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Saída') . '</td>';
+                    echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Despesas') . '</td>';
                     echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
                     echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
                     echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
@@ -176,7 +176,7 @@
             echo '</tr></thead><tbody>';
             while ($row = $res->fetch_assoc()) {
                 echo '<tr>';
-                echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Saída') . '</td>';
+                echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Despesas') . '</td>';
                 echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
                 echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
                 echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';

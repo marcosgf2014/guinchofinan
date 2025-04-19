@@ -90,7 +90,7 @@ $resumo['saldo'] = $resumo['entradas'] - $resumo['saidas'];
 </div>
 <div class="col-md-6">
     <label for="valor" class="form-label">Valor</label>
-    <input type="number" step="0.01" class="form-control" id="valor" name="valor" placeholder="Valor" required>
+    <input type="text" class="form-control" id="valor" name="valor" placeholder="Valor" required>
 </div>
 <div class="col-md-6">
     <label for="pagamento" class="form-label">Pagamento</label>
@@ -174,7 +174,7 @@ $res = $conn->query($sql);
 if ($res && $res->num_rows > 0) {
     while ($row = $res->fetch_assoc()) {
         echo '<tr>';
-        echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Saída') . '</td>';
+        echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receitas' : 'Despesas') . '</td>';
         echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
         echo '<td>' . (!empty($row['data']) ? date('d-m-Y', strtotime($row['data'])) : '') . '</td>';
         echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';

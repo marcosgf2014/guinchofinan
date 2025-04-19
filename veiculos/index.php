@@ -92,7 +92,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="valor_servico" class="form-label">Valor do Serviço (R$)</label>
-                            <input type="number" step="0.01" class="form-control" id="valor_servico" name="valor_servico" placeholder="Valor do Serviço" required>
+                            <input type="text" class="form-control" id="valor_servico" name="valor_servico" placeholder="Valor do Serviço" required>
                         </div>
                         <div class="col-md-6">
                             <label for="data_entrada" class="form-label">Data de Entrada</label>
