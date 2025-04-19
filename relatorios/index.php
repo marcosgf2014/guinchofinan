@@ -51,7 +51,13 @@
             $sql = "SELECT * FROM financeiro WHERE data BETWEEN '$inicio' AND '$fim' ORDER BY data DESC, id DESC";
             $res = $conn->query($sql);
             if ($res && $res->num_rows > 0) {
-                echo '<div class="table-responsive">';
+                echo '<div class="mb-2 d-flex gap-2">'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
+
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+.'</div>';
+echo '<div class="table-responsive">';
                 echo '<table class="table table-striped table-hover align-middle shadow-sm">';
                 echo '<thead class="table-dark"><tr>';
                 echo '<th>Tipo</th><th>Categoria</th><th>Data</th><th>Descrição</th><th>Valor</th><th>Pagamento</th><th>Nota Fiscal</th>';
@@ -113,7 +119,13 @@
             $sql = "SELECT * FROM financeiro WHERE categoria = '$cat' ORDER BY data DESC, id DESC";
             $res = $conn->query($sql);
             if ($res && $res->num_rows > 0) {
-                echo '<div class="table-responsive">';
+                echo '<div class="mb-2 d-flex gap-2">'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
+
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+.'</div>';
+echo '<div class="table-responsive">';
                 echo '<table class="table table-striped table-hover align-middle shadow-sm">';
                 echo '<thead class="table-dark"><tr>';
                 echo '<th>Tipo</th><th>Categoria</th><th>Data</th><th>Descrição</th><th>Valor</th><th>Pagamento</th><th>Nota Fiscal</th>';
@@ -169,7 +181,13 @@
         $sql = "SELECT * FROM financeiro ORDER BY data DESC, id DESC";
         $res = $conn->query($sql);
         if ($res && $res->num_rows > 0) {
-            echo '<div class="table-responsive">';
+            echo '<div class="mb-2 d-flex gap-2">'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
+
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+.'</div>';
+echo '<div class="table-responsive">';
             echo '<table class="table table-striped table-hover align-middle shadow-sm">';
             echo '<thead class="table-dark"><tr>';
             echo '<th>Tipo</th><th>Categoria</th><th>Data</th><th>Descrição</th><th>Valor</th><th>Pagamento</th><th>Nota Fiscal</th>';
@@ -232,5 +250,55 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
     </main>
+<!-- jsPDF e autoTable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
+<script>
+function exportTableToPDF(btn) {
+    var table = btn.nextElementSibling.querySelector('table');
+    var doc = new jspdf.jsPDF('l', 'pt', 'a4');
+    doc.autoTable({
+        html: table,
+        theme: 'grid',
+        headStyles: { fillColor: [33, 37, 41] },
+        styles: { fontSize: 10 },
+        margin: { top: 20 },
+    });
+    doc.save('relatorio.pdf');
+}
+
+function printTable(btn) {
+    var table = btn.parentNode.nextElementSibling.querySelector('table');
+    var doc = new jspdf.jsPDF('l', 'pt', 'a4');
+    doc.autoTable({
+        html: table,
+        theme: 'grid',
+        headStyles: { fillColor: [33, 37, 41] },
+        styles: { fontSize: 10 },
+        margin: { top: 20 },
+    });
+    window.open(doc.output('bloburl'), '_blank');
+}
+
+function exportTableToTXT(btn) {
+    var table = btn.parentNode.nextElementSibling.querySelector('table');
+    var rows = table.querySelectorAll('tr');
+    let txt = '';
+    for (let row of rows) {
+        let cols = row.querySelectorAll('th, td');
+        let rowData = [];
+        for (let col of cols) {
+            rowData.push(col.innerText.replace(/\n/g, ' '));
+        }
+        txt += rowData.join(';') + '\n';
+    }
+    let txtFile = new Blob([txt], {type: 'text/plain'});
+    let link = document.createElement('a');
+    link.download = 'relatorio.txt';
+    link.href = window.URL.createObjectURL(txtFile);
+    link.click();
+}
+</script>
+
 </body>
 </html>
