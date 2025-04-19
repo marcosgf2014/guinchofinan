@@ -33,10 +33,10 @@
     <b>Relatório por Período</b>
     <form class="row g-2 mt-2" method="get" action="#" id="formPeriodo">
         <div class="col-md-5">
-            <input type="date" class="form-control" name="inicio" id="periodo_inicio" placeholder="Data início">
+            <input type="date" class="form-control" name="periodo_inicio" id="periodo_inicio" placeholder="yyyy-mm-dd">
         </div>
         <div class="col-md-5">
-            <input type="date" class="form-control" name="fim" id="periodo_fim" placeholder="Data fim">
+            <input type="date" class="form-control" name="periodo_fim" id="periodo_fim" placeholder="yyyy-mm-dd">
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Gerar</button>
@@ -64,7 +64,8 @@ echo '<div class="table-responsive">';
                 echo '</tr></thead><tbody>';
                 while ($row = $res->fetch_assoc()) {
                     echo '<tr>';
-                    echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Despesas') . '</td>';
+                    $tipoLabel = ($row['tipo'] === 'entrada') ? 'Receitas' : (($row['tipo'] === 'saida') ? 'Despesas' : ucfirst($row['tipo']));
+echo '<td>' . htmlspecialchars($tipoLabel) . '</td>';
                     echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
                     echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
                     echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
@@ -132,7 +133,8 @@ echo '<div class="table-responsive">';
                 echo '</tr></thead><tbody>';
                 while ($row = $res->fetch_assoc()) {
                     echo '<tr>';
-                    echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Despesas') . '</td>';
+                    $tipoLabel = ($row['tipo'] === 'entrada') ? 'Receitas' : (($row['tipo'] === 'saida') ? 'Despesas' : ucfirst($row['tipo']));
+echo '<td>' . htmlspecialchars($tipoLabel) . '</td>';
                     echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
                     echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
                     echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
@@ -150,25 +152,66 @@ echo '<div class="table-responsive">';
     </div>
 </li>
 <li class="list-group-item">
-    <b>Receitas vs Despesas</b>
-    <button type="button" class="btn btn-primary mt-2" id="btnReceitasDespesas">Gerar Relatório</button>
-    <div id="relatorioReceitasDespesas" class="mt-3" style="display:none;">
+    <b>Relatório por Tipo</b>
+    <form class="row g-2 mt-2" method="get" action="#" id="formTipo">
+        <div class="col-md-8">
+            <select class="form-select" name="tipo_filtro" id="tipo_filtro">
+                <option value="">Selecione o tipo</option>
+                <?php
+                require_once '../db.php';
+                $sqlTipos = "SELECT DISTINCT tipo FROM financeiro ORDER BY tipo";
+                $resTipos = $conn->query($sqlTipos);
+                if ($resTipos && $resTipos->num_rows > 0) {
+                    while ($row = $resTipos->fetch_assoc()) {
+                        $tipoVal = htmlspecialchars($row['tipo']);
+$tipoLabel = $tipoVal === 'entrada' ? 'Receitas' : ($tipoVal === 'saida' ? 'Despesas' : ucfirst($tipoVal));
+echo "<option value=\"$tipoVal\"";
+if (isset($_GET['tipo_filtro']) && $_GET['tipo_filtro'] == $tipoVal) echo ' selected';
+echo ">$tipoLabel</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">Gerar</button>
+        </div>
+    </form>
+    <div id="relatorioTipo" class="mt-3"<?php if(isset($_GET['tipo_filtro']) && $_GET['tipo_filtro']){echo '';}else{echo ' style=\"display:none;\"';} ?>>
         <?php
-        require_once '../db.php';
-        $sql = "SELECT tipo, SUM(valor) as total FROM financeiro GROUP BY tipo";
-        $res = $conn->query($sql);
-        $entradas = 0; $saidas = 0;
-        if ($res && $res->num_rows > 0) {
-            while ($row = $res->fetch_assoc()) {
-                if ($row['tipo'] === 'entrada') $entradas = $row['total'];
-                if ($row['tipo'] === 'saida') $saidas = $row['total'];
+        if (isset($_GET['tipo_filtro']) && $_GET['tipo_filtro']) {
+            $tipo = $conn->real_escape_string($_GET['tipo_filtro']);
+            $sql = "SELECT * FROM financeiro WHERE tipo = '$tipo' ORDER BY data DESC, id DESC";
+            $res = $conn->query($sql);
+            if ($res && $res->num_rows > 0) {
+                echo '<div class="mb-2 d-flex gap-2">'
+    .'<button class="btn btn-outline-success btn-sm" onclick="printTable(this)"><i class="fas fa-print"></i> Exibir</button>'
+    .'<button class="btn btn-outline-danger btn-sm" onclick="exportTableToPDF(this)"><i class="fas fa-file-pdf"></i> Salvar PDF</button>'
+    .'<button class="btn btn-outline-success btn-sm" onclick="exportTableToCSV(this)"><i class="fas fa-file-csv"></i> Salvar CSV</button>'
+    .'<button class="btn btn-outline-secondary btn-sm" onclick="exportTableToTXT(this)"><i class="fas fa-file-alt"></i> Salvar TXT</button>'
+.'</div>';
+                echo '<div class="table-responsive">';
+                echo '<table class="table table-striped table-hover align-middle shadow-sm">';
+                echo '<thead class="table-dark"><tr>';
+                echo '<th>Tipo</th><th>Categoria</th><th>Data</th><th>Descrição</th><th>Valor</th><th>Pagamento</th><th>Nota Fiscal</th>';
+                echo '</tr></thead><tbody>';
+                while ($row = $res->fetch_assoc()) {
+                    echo '<tr>';
+                    $tipoLabel = ($row['tipo'] === 'entrada') ? 'Receitas' : (($row['tipo'] === 'saida') ? 'Despesas' : ucfirst($row['tipo']));
+echo '<td>' . htmlspecialchars($tipoLabel) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
+                    echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
+                    echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
+                    echo '<td>R$ ' . number_format($row['valor'] ?? 0, 2, ',', '.') . '</td>';
+                    echo '<td>' . htmlspecialchars($row['pagamento'] ?? '') . '</td>';
+                    echo '<td>' . htmlspecialchars($row['nota_fiscal'] ?? '') . '</td>';
+                    echo '</tr>';
+                }
+                echo '</tbody></table></div>';
+            } else {
+                echo '<div class="alert alert-warning">Nenhum lançamento encontrado para o tipo selecionado.</div>';
             }
         }
-        echo '<div class="row">';
-        echo '<div class="col-md-6"><div class="alert alert-success">Total de Receitas: <b>R$ ' . number_format($entradas,2,',','.') . '</b></div></div>';
-        echo '<div class="col-md-6"><div class="alert alert-danger">Total de Despesas: <b>R$ ' . number_format($saidas,2,',','.') . '</b></div></div>';
-        echo '</div>';
-        echo '<div class="alert alert-primary">Saldo: <b>R$ ' . number_format($entradas-$saidas,2,',','.') . '</b></div>';
         ?>
     </div>
 </li>
@@ -194,7 +237,8 @@ echo '<div class="table-responsive">';
             echo '</tr></thead><tbody>';
             while ($row = $res->fetch_assoc()) {
                 echo '<tr>';
-                echo '<td>' . ($row['tipo'] === 'entrada' ? 'Receita' : 'Despesas') . '</td>';
+                $tipoLabel = ($row['tipo'] === 'entrada') ? 'Receitas' : (($row['tipo'] === 'saida') ? 'Despesas' : ucfirst($row['tipo']));
+echo '<td>' . htmlspecialchars($tipoLabel) . '</td>';
                 echo '<td>' . htmlspecialchars($row['categoria'] ?? '') . '</td>';
                 echo '<td>' . (!empty($row['data']) ? date('d/m/Y', strtotime($row['data'])) : '') . '</td>';
                 echo '<td>' . htmlspecialchars($row['descricao'] ?? '') . '</td>';
