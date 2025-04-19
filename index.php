@@ -9,7 +9,7 @@
 </head>
 <body>
     <aside class="sidebar">
-        <div class="sidebar-title">Guinchos</div>
+        <div class="sidebar-title">Guincho</div>
         <nav>
             <a href="index.php" class="active"><i class="fas fa-home"></i> Dashboard</a>
             <a href="clientes/index.php"><i class="fas fa-users"></i> Clientes</a>
