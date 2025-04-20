@@ -43,11 +43,11 @@ if (isset($_GET['id'])) {
                 <!-- Primeira linha: Cliente, Veículo, Data -->
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
-                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?= $edit ? htmlspecialchars($checklist['cliente']) : (isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : '') ?>" required <?= $edit ? 'readonly' : '' ?> >
+                    <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Nome do cliente" value="<?= $edit ? htmlspecialchars($checklist['cliente']) : (isset($_GET['cliente']) ? htmlspecialchars($_GET['cliente']) : '') ?>" required >
                 </div>
                 <div class="col-md-5">
                     <label for="veiculo" class="form-label">Veículo</label>
-                    <input type="text" class="form-control" id="veiculo" name="veiculo" placeholder="Veículo" value="<?= $edit ? htmlspecialchars($checklist['veiculo']) : (isset($_GET['veiculo']) ? htmlspecialchars($_GET['veiculo']) : '') ?>" required <?= $edit ? 'readonly' : '' ?>>
+                    <input type="text" class="form-control" id="veiculo" name="veiculo" placeholder="Modelo - Placa" value="<?= $edit ? htmlspecialchars($checklist['veiculo']) : (isset($_GET['veiculo']) ? htmlspecialchars($_GET['veiculo']) : '') ?>" required >
                 </div>
                 <div class="col-md-2">
                     <label for="entrada" class="form-label">Entrada</label>

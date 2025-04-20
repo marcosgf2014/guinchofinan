@@ -140,6 +140,7 @@ while ($fotoRow = $result->fetch_assoc()) {
 $stmt->close();
 ?>
 <?php if (!empty($fotos)): ?>
+    <div style="page-break-before: always;"></div>
     <div class="relatorio-section-title"><i class="fas fa-camera"></i> Fotos do Veículo</div>
     <div class="row mb-2">
         <?php foreach ($fotos as $foto): ?>
@@ -147,6 +148,18 @@ $stmt->close();
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
+    <div class="row" style="page-break-inside:avoid; margin-top:60px;">
+        <div class="col-md-6 text-center" style="margin-bottom:40px;">
+            <div style="margin-bottom:60px;"></div>
+            <div style="border-bottom:1px solid #222; width:80%; margin:0 auto 8px auto; height:0;"></div>
+            <div style="font-size:1.05rem; color:#222;">Assinatura do Cliente</div>
+        </div>
+        <div class="col-md-6 text-center" style="margin-bottom:40px;">
+            <div style="margin-bottom:60px;"></div>
+            <div style="border-bottom:1px solid #222; width:80%; margin:0 auto 8px auto; height:0;"></div>
+            <div style="font-size:1.05rem; color:#222;">Assinatura do Responsável</div>
+        </div>
+    </div>
         <?php if (!empty($row['assinatura_cliente']) || !empty($row['assinatura_responsavel'])): ?>
             <div class="relatorio-section-title"><i class="fas fa-signature"></i> Assinaturas</div>
             <div class="row mb-2">

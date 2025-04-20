@@ -39,6 +39,7 @@ if (isset($_GET['id'])) {
     <main class="main-content container py-4">
         <h1 class="mb-4"><i class="fas fa-edit"></i> Editar Checklist</h1>
         <form class="row g-3 p-3" method="post" action="salvar_checklist.php?id=<?= $checklist['id'] ?>" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?= $checklist['id'] ?>">
             <div class="row mb-3 align-items-end">
                 <div class="col-md-5">
                     <label for="cliente" class="form-label">Cliente</label>
@@ -58,11 +59,11 @@ if (isset($_GET['id'])) {
             <div class="row mb-3 align-items-end">
                 <div class="col-md-6">
                     <label for="origem" class="form-label">Origem</label>
-                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?php echo isset($_GET['origem']) ? htmlspecialchars($_GET['origem']) : htmlspecialchars($checklist['origem'] ?? ''); ?>" readonly>
+                    <input type="text" class="form-control" id="origem" name="origem" placeholder="Local de origem" value="<?php echo isset($_GET['origem']) ? htmlspecialchars($_GET['origem']) : htmlspecialchars($checklist['origem'] ?? ''); ?>">
                 </div>
                 <div class="col-md-6">
                     <label for="destino" class="form-label">Destino</label>
-                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?php echo isset($_GET['destino']) ? htmlspecialchars($_GET['destino']) : htmlspecialchars($checklist['destino'] ?? ''); ?>" readonly>
+                    <input type="text" class="form-control" id="destino" name="destino" placeholder="Local de destino" value="<?php echo isset($_GET['destino']) ? htmlspecialchars($_GET['destino']) : htmlspecialchars($checklist['destino'] ?? ''); ?>">
                 </div>
                 </div>
             </div>

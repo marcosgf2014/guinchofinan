@@ -45,7 +45,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // UPDATE
     $id = intval($_GET['id']);
     $sql = "UPDATE checklist SET
-        cliente=?, veiculo=?, data_entrada=?, quilometragem=?, nivel_combustivel=?, danos_externos=?, pertences=?, observacoes=?,
+        cliente=?, origem=?, destino=?, veiculo=?, data_entrada=?, quilometragem=?, nivel_combustivel=?, danos_externos=?, pertences=?, observacoes=?,
         pneus_dianteiros=?, pneus_traseiros=?, rodas_dianteiras=?, rodas_traseiras=?,
         calotas=?, retrovisores=?, palhetas=?, triangulo=?, macaco_chave=?, estepe=?,
         bancos=?, painel=?, consoles=?, forracao=?, tapetes=?,
@@ -54,8 +54,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         WHERE id=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        'sssissssssiiiiiiiiiiiiiiiiissssi',
-        $cliente, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
+        'ssssssissssssiiiiiiiiiiiiiiiiissssi',
+        $cliente, $origem, $destino, $veiculo, $data_entrada, $quilometragem, $nivel_combustivel, $danos_externos, $pertences, $observacoes,
         $pneus_dianteiros, $pneus_traseiros, $rodas_dianteiras, $rodas_traseiras,
         $calotas, $retrovisores, $palhetas, $triangulo, $macaco_chave, $estepe,
         $bancos, $painel, $consoles, $forracao, $tapetes,

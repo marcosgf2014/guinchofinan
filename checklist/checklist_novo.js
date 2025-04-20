@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const destinoInput = document.getElementById('destino');
 
     // Se cliente e veiculo vierem preenchidos via GET, buscar origem/destino
-    if (clienteInput.value && veiculoSelect.value) {
+    // Só buscar origem/destino do veículo se NÃO estiver editando (ou seja, se não houver campo hidden com id do checklist)
+    if (clienteInput.value && veiculoSelect.value && !document.querySelector('input[name="id"]')) {
         fetch('get_veiculo_info.php?cliente=' + encodeURIComponent(clienteInput.value) + '&veiculo=' + encodeURIComponent(veiculoSelect.value))
             .then(res => res.json())
             .then(data => {
