@@ -1,0 +1,16 @@
+Array
+(
+    [login_digitado] => admin
+    [senha_digitada] => 102020
+    [user_encontrado] => Array
+        (
+            [id] => 1
+            [login] => admin
+            [senha] => $2y$10$HojJ5ula7IHK/bzXdCHA/OOmbl8XPmY3Itf.F.g45EQYLo4gb/5Gy
+            [senha_temporaria] => 0
+            [criado_em] => 2025-04-19 23:14:43
+        )
+
+    [senha_hash] => $2y$10$HojJ5ula7IHK/bzXdCHA/OOmbl8XPmY3Itf.F.g45EQYLo4gb/5Gy
+    [password_verify] => 1
+)
