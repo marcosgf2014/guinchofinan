@@ -156,29 +156,29 @@
                         if ($res && $res->num_rows > 0) {
                             while ($row = $res->fetch_assoc()) {
                                 echo '<tr>';
-                                echo '<td>' . htmlspecialchars($row['cliente_nome']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['placa']) . '</td>';
-                                echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
-                                echo '<td>R$ ' . number_format($row['valor_servico'], 2, ',', '.') . '</td>';
-                                echo '<td class="text-center">';
+                                echo '<td>' . htmlspecialchars($row['cliente_nome'] ?? '') . '</td>';
+echo '<td>' . htmlspecialchars($row['placa'] ?? '') . '</td>';
+echo '<td>' . htmlspecialchars($row['modelo'] ?? '') . '</td>';
+echo '<td>R$ ' . number_format($row['valor_servico'] ?? 0, 2, ',', '.') . '</td>';
+echo '<td class="text-center">';
                                 echo '<a href="../checklist/checklist_novo.php?cliente=' . urlencode($row['cliente_nome']) . '&veiculo=' . urlencode($row['modelo'] . ' - ' . $row['placa']) . '" class="btn-acao btn-checklist btn-checklist-veiculo me-1" title="Checklist"><i class="fas fa-clipboard-check"></i></a>';
 echo '<a href="#" class="btn-acao btn-editar btn-editar-veiculo" title="Editar" 
     data-id="' . $row['id'] . '"
     data-cliente_id="' . $row['cliente_id'] . '"
-    data-tipo_veiculo="' . htmlspecialchars($row['tipo_veiculo'], ENT_QUOTES) . '"
-    data-placa="' . htmlspecialchars($row['placa'], ENT_QUOTES) . '"
-    data-modelo="' . htmlspecialchars($row['modelo'], ENT_QUOTES) . '"
-    data-ano="' . htmlspecialchars($row['ano'], ENT_QUOTES) . '"
-    data-cor="' . htmlspecialchars($row['cor'], ENT_QUOTES) . '"
-    data-status="' . htmlspecialchars($row['status'], ENT_QUOTES) . '"
-    data-valor_servico="' . htmlspecialchars($row['valor_servico'], ENT_QUOTES) . '"
-    data-data_entrada="' . htmlspecialchars($row['data_entrada'], ENT_QUOTES) . '"
-    data-hora_entrada="' . htmlspecialchars($row['hora_entrada'], ENT_QUOTES) . '"
-    data-data_saida="' . htmlspecialchars($row['data_saida'], ENT_QUOTES) . '"
-    data-hora_saida="' . htmlspecialchars($row['hora_saida'], ENT_QUOTES) . '"
-    data-origem="' . htmlspecialchars($row['origem'], ENT_QUOTES) . '"
-    data-destino="' . htmlspecialchars($row['destino'], ENT_QUOTES) . '"
-    data-obs="' . htmlspecialchars($row['obs'], ENT_QUOTES) . '">
+    data-tipo_veiculo="' . htmlspecialchars($row['tipo_veiculo'] ?? '', ENT_QUOTES) . '"
+    data-placa="' . htmlspecialchars($row['placa'] ?? '', ENT_QUOTES) . '"
+    data-modelo="' . htmlspecialchars($row['modelo'] ?? '', ENT_QUOTES) . '"
+    data-ano="' . htmlspecialchars($row['ano'] ?? '', ENT_QUOTES) . '"
+    data-cor="' . htmlspecialchars($row['cor'] ?? '', ENT_QUOTES) . '"
+    data-status="' . htmlspecialchars($row['status'] ?? '', ENT_QUOTES) . '"
+    data-valor_servico="' . htmlspecialchars($row['valor_servico'] ?? '', ENT_QUOTES) . '"
+    data-data_entrada="' . htmlspecialchars($row['data_entrada'] ?? '', ENT_QUOTES) . '"
+    data-hora_entrada="' . htmlspecialchars($row['hora_entrada'] ?? '', ENT_QUOTES) . '"
+    data-data_saida="' . htmlspecialchars($row['data_saida'] ?? '', ENT_QUOTES) . '"
+    data-hora_saida="' . htmlspecialchars($row['hora_saida'] ?? '', ENT_QUOTES) . '"
+    data-origem="' . htmlspecialchars($row['origem'] ?? '', ENT_QUOTES) . '"
+    data-destino="' . htmlspecialchars($row['destino'] ?? '', ENT_QUOTES) . '"
+    data-obs="' . htmlspecialchars($row['obs'] ?? '', ENT_QUOTES) . '">
     <i class="fas fa-edit"></i>
 </a>';
                                 echo '<a href="excluir.php?id=' . $row['id'] . '" class="btn-acao btn-excluir btn-excluir-veiculo" title="Excluir" onclick=\'return confirm("Tem certeza que deseja excluir este veículo?");\'><i class="fas fa-trash"></i></a>';

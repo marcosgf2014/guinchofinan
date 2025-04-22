@@ -12,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $valor_servico = floatval(str_replace([','], ['.'], $_POST['valor_servico'] ?? '0'));
     $data_entrada  = $conn->real_escape_string($_POST['data_entrada'] ?? '');
     $hora_entrada  = $conn->real_escape_string($_POST['hora_entrada'] ?? '');
-    $data_saida    = $conn->real_escape_string($_POST['data_saida'] ?? '');
-    $hora_saida    = $conn->real_escape_string($_POST['hora_saida'] ?? '');
+    $data_saida_raw = $_POST['data_saida'] ?? '';
+    $hora_saida_raw = $_POST['hora_saida'] ?? '';
+    $data_saida = ($data_saida_raw === '' || is_null($data_saida_raw)) ? null : $conn->real_escape_string($data_saida_raw);
+    $hora_saida = ($hora_saida_raw === '' || is_null($hora_saida_raw)) ? null : $conn->real_escape_string($hora_saida_raw);
     $origem        = $conn->real_escape_string($_POST['origem'] ?? '');
     $destino       = $conn->real_escape_string($_POST['destino'] ?? '');
     $obs           = $conn->real_escape_string($_POST['obs'] ?? '');
@@ -34,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 valor_servico = $valor_servico,
                 data_entrada = '$data_entrada',
                 hora_entrada = '$hora_entrada',
-                data_saida = " . ($data_saida ? "'$data_saida'" : 'NULL') . ",
-                hora_saida = " . ($hora_saida ? "'$hora_saida'" : 'NULL') . ",
+                data_saida = " . (isset($data_saida) ? "'$data_saida'" : 'NULL') . ",
+                hora_saida = " . (isset($hora_saida) ? "'$hora_saida'" : 'NULL') . ",
                 origem = '$origem',
                 destino = '$destino',
                 obs = '$obs'
@@ -56,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $cliente_id, '$tipo_veiculo', '$placa', '$modelo',
                 $ano, '$cor', '$status', $valor_servico,
                 '$data_entrada', '$hora_entrada',
-                " . ($data_saida ? "'$data_saida'" : 'NULL') . ",
-                " . ($hora_saida ? "'$hora_saida'" : 'NULL') . ",
+                " . (isset($data_saida) ? "'$data_saida'" : 'NULL') . ",
+                " . (isset($hora_saida) ? "'$hora_saida'" : 'NULL') . ",
                 '$origem', '$destino', '$obs'
             )";
             if ($conn->query($sql)) {
